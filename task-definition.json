@@ -14,11 +14,11 @@
     "essential": true,
     "secrets": [{
       "name": "SLACK_SIGNING_SECRET",
-      "valueFrom": "SLACK_SIGNING_SECRET"
+      "valueFrom": "arn:aws:secretsmanager:us-east-2:688884479171:secret:kirila-B1MwO5/SLACK_SIGNING_SECRET"
     },
     {
       "name": "SLACK_BOT_TOKEN",
-      "valueFrom": "SLACK_BOT_TOKEN"
+      "valueFrom": "arn:aws:secretsmanager:us-east-2:688884479171:secret:kirila-B1MwO5/SLACK_BOT_TOKEN"
     }]
   }],
   "requiresCompatibilities": [
