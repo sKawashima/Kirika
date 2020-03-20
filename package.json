@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsnd src/index.ts",
+    "start": "ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,15 @@
   "bugs": {
     "url": "https://github.com/sKawashima/Kirika/issues"
   },
-  "homepage": "https://github.com/sKawashima/Kirika#readme"
+  "homepage": "https://github.com/sKawashima/Kirika#readme",
+  "devDependencies": {
+    "@types/node": "^13.9.2",
+    "dotenv": "^8.2.0",
+    "ts-node": "^8.7.0",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@slack/bolt": "^1.8.0"
+  }
 }
