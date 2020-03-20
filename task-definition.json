@@ -11,7 +11,15 @@
       "hostPort": 80,
       "protocol": "tcp"
     }],
-    "essential": true
+    "essential": true,
+    "secrets": [{
+      "name": "SLACK_SIGNING_SECRET",
+      "valueFrom": "SLACK_SIGNING_SECRET"
+    },
+    {
+      "name": "SLACK_BOT_TOKEN",
+      "valueFrom": "SLACK_BOT_TOKEN"
+    }]
   }],
   "requiresCompatibilities": [
     "FARGATE"
