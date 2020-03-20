@@ -18,14 +18,12 @@
     "url": "https://github.com/sKawashima/Kirika/issues"
   },
   "homepage": "https://github.com/sKawashima/Kirika#readme",
-  "devDependencies": {
+  "dependencies": {
+    "@slack/bolt": "^1.8.0",
     "@types/node": "^13.9.2",
     "dotenv": "^8.2.0",
     "ts-node": "^8.7.0",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.8.3"
-  },
-  "dependencies": {
-    "@slack/bolt": "^1.8.0"
   }
 }
