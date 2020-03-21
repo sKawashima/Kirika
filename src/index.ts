@@ -6,15 +6,15 @@ import app from './initBolt'
 })()
 
 app.event("app_home_opened", async ({ event, say }) => {
-  say(":de-su:");
-});
+  say(":de-su:")
+})
 
 app.message("デス", async ({ message, say }) => {
-  say(":de-su:");
-});
+  say(":de-su:")
+})
 
 app.command("/say-kirika", async ({ command, ack, say }) => {
-  ack();
+  ack()
 
-  say(`${command.text}:desu:`);
-});
+  say(`${command.text}:desu:`)
+})
