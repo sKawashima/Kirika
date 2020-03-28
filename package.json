@@ -33,6 +33,6 @@
     "prettier-standard": "^16.2.1"
   },
   "lint-staged": {
-    "**/*": ["modern precommit", "git add"]
+    "**/*": ["modern precommit"]
   }
 }
