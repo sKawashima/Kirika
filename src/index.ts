@@ -10,10 +10,6 @@ app.command('/say-kirika', async ({ command, ack, say }) => {
   say(`${command.text}:desu:`)
 })
 
-app.event('app_home_opened', async ({ event, say }) => {
-  say(':de-su:')
-})
-
 app.event('channel_created', async ({event, context}) => {
   try {
     const result = await app.client.chat.postMessage({
