@@ -2,7 +2,7 @@ import app from './initBolt'
 
 export const getChannelsList = async ({ token }) => {
   try {
-    const getChannelsListResponce = await app.client.channels.list({
+    const getChannelsListResponce:any = await app.client.channels.list({
       token: token
     })
 
