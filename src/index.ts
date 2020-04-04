@@ -15,7 +15,7 @@ app.event('channel_created', async ({event, context}) => {
     const result = await app.client.chat.postMessage({
       token: context.botToken,
       channel: 'general',
-      text: `新チャンネルが作られた:de-su::eyes:\n#${event.channel.name}`,
+      text: `新しいチャンネル:de-su::eyes:\n#${event.channel.name}`,
       link_names: true
     })
   } catch (err) {
