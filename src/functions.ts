@@ -15,7 +15,7 @@ export const getChannelsList = async ({ token }) => {
     let channelsListText = ''
     getChannelsListResponce.channels.forEach(channel => {
       if (!channel.is_archived)
-        channelsListText += `<#${channel.id}|${channel.name}> ${channel.topic.value} (${channel.members.length} members)\n`
+        channelsListText += `<#${channel.id}|${channel.name}> ${channel.topic.value}\n`
     })
 
     return `チャンネル一覧 :de-su:\n\n${channelsListText}`
