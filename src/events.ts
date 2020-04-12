@@ -13,6 +13,10 @@ const initEvents = () => {
       console.log(err)
     }
   })
+
+  app.event('app_mention', async ({say}) => {
+    say(':de-su:')
+  })
 }
 
 export default initEvents
