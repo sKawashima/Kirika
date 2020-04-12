@@ -14,7 +14,7 @@ const initEvents = () => {
     }
   })
 
-  app.event('app_mention', async ({say}) => {
+  app.event('app_mention', async ({ say }) => {
     say(':de-su:')
   })
 }
