@@ -34,6 +34,7 @@
   },
   "lint-staged": {
     "**/*": [
+      "modern format",
       "modern precommit"
     ]
   }
