@@ -6,7 +6,7 @@ const initMessages = () => {
     say(':de-su:')
   })
 
-  app.message(/^(LGTM|lgtm)/, async ({ say }) => {
+  app.message(/(LGTM|lgtm)/, async ({ say }) => {
     const lgtmImageURL = lgtmList[Math.floor(Math.random() * lgtmList.length)]
     say(lgtmImageURL)
   })
