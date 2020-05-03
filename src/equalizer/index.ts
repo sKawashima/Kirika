@@ -9,6 +9,8 @@ const equalizer = async () => {
     dataToBurden(data.sKFixedData)
 
   const message = `現在入力されているデータでの精算情報:de-su:
+データ置き場
+https://github.com/skryu-studio/equalizer
 
 ryu_g → sK 固定費
 ${dataToTextTable(data.sKFixedData)}
