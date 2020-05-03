@@ -4,7 +4,6 @@ import * as dotenv from 'dotenv'
 import getDataFromGitHub from './getDataFromGitHub'
 import convertDataStringToObject from './convertDataStringToObject'
 import formatSpritingBillsData from './formatSpritingBillsData'
-import formatNotEqualData from './formatNotEqualData'
 
 const setupData = async () => {
   dotenv.config()
@@ -17,8 +16,8 @@ const setupData = async () => {
   const month = `0${now.getMonth() + 1}`.slice(-2)
   const yearMonth = `${year}/${month}`
 
-  const notEqualStringData = await getDataFromGitHub(
-    `${yearMonth}/not-equal(sK ryu-g).txt`,
+  const sKFixedStringData = await getDataFromGitHub(
+    `${yearMonth}/sK_fixed.txt`,
     octokit
   )
   const sKStringData = await getDataFromGitHub(`${yearMonth}/sK.txt`, octokit)
@@ -27,8 +26,8 @@ const setupData = async () => {
     octokit
   )
 
-  const notEqualData = formatNotEqualData(
-    convertDataStringToObject(notEqualStringData)
+  const sKFixedData = formatSpritingBillsData(
+    convertDataStringToObject(sKFixedStringData)
   )
   const sKData = formatSpritingBillsData(
     convertDataStringToObject(sKStringData)
@@ -38,7 +37,7 @@ const setupData = async () => {
   )
 
   return {
-    notEqualData: notEqualData,
+    sKFixedData: sKFixedData,
     sKData: sKData,
     ryuData: ryuData
   }
