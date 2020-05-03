@@ -2,7 +2,6 @@ import { Octokit, RestEndpointMethodTypes } from '@octokit/rest'
 import * as dotenv from 'dotenv'
 
 import getDataFromGitHub from './getDataFromGitHub'
-import convertDataStringToObject from './convertDataStringToObject'
 import formatSpritingBillsData from './formatSpritingBillsData'
 
 const setupData = async () => {
@@ -26,15 +25,9 @@ const setupData = async () => {
     octokit
   )
 
-  const sKFixedData = formatSpritingBillsData(
-    convertDataStringToObject(sKFixedStringData)
-  )
-  const sKData = formatSpritingBillsData(
-    convertDataStringToObject(sKStringData)
-  )
-  const ryuData = formatSpritingBillsData(
-    convertDataStringToObject(ryuStringData)
-  )
+  const sKFixedData = formatSpritingBillsData(sKFixedStringData)
+  const sKData = formatSpritingBillsData(sKStringData)
+  const ryuData = formatSpritingBillsData(ryuStringData)
 
   return {
     sKFixedData: sKFixedData,
