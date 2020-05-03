@@ -1,4 +1,5 @@
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest'
+import * as dotenv from 'dotenv'
 
 import getDataFromGitHub from './getDataFromGitHub'
 import convertDataStringToObject from './convertDataStringToObject'
@@ -6,8 +7,10 @@ import formatSpritingBillsData from './formatSpritingBillsData'
 import formatNotEqualData from './formatNotEqualData'
 
 const setupData = async () => {
+  dotenv.config()
+
   const octokit = new Octokit({
-    auth: '85db0c09e289ab880736d310bd59a8200c2534d9'
+    auth: process.env.GITHUB_TOKEN
   })
   const now = new Date()
   const year = `${now.getFullYear()}`
