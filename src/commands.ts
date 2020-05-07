@@ -18,6 +18,7 @@ const initCommands = () => {
 
   app.command('/kirika-mahjong', async ({ ack, command, context }) => {
     ack()
+
     const userId = command.user_id
     try {
       const postMessageResponce = await app.client.chat.postMessage({
