@@ -3,12 +3,12 @@ import { getChannelsList } from './functions'
 import equalizer from './equalizer'
 
 const initCommands = () => {
-  app.command('/kirika-say', async ({ command, ack, say }) => {
+  app.command('/kirika-say', async ({ ack, command, say }) => {
     ack()
     say(`${command.text}:de-su:`)
   })
 
-  app.command('/kirika-channel-list', async ({ ack, say, context }) => {
+  app.command('/kirika-channel-list', async ({ ack, context, say }) => {
     ack()
     const channelsListText = await getChannelsList({
       token: context.botToken
@@ -16,7 +16,7 @@ const initCommands = () => {
     say(channelsListText)
   })
 
-  app.command('/kirika-mahjong', async ({ command, ack, context }) => {
+  app.command('/kirika-mahjong', async ({ ack, command, context }) => {
     ack()
     const userName = command.user_name
     try {
@@ -33,7 +33,7 @@ const initCommands = () => {
     }
   })
 
-  app.command('/equalizer', async ({ ack, say }) => {
+  app.command('/equalizer', async ({ ack, command, say }) => {
     ack()
     const userName = command.user_name
     const message = await equalizer()
