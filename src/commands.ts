@@ -18,14 +18,14 @@ const initCommands = () => {
 
   app.command('/kirika-mahjong', async ({ ack, command, context }) => {
     ack()
-    const userName = command.user_name
+    const userId = command.user_id
     try {
       const postMessageResponce = await app.client.chat.postMessage({
         token: context.botToken,
         channel: '帝国麻雀部',
         text: `@here ${
           command.text !== '' ? `${command.text}:de-su:` : ''
-        }\n\n*from:* @${userName}\nhttps://hama-empire.slack.com/files/UECKGJR0B/F011XMYCK6C/pic-mj1.png`,
+        }\n\n*from:* <@${userId}>\nhttps://hama-empire.slack.com/files/UECKGJR0B/F011XMYCK6C/pic-mj1.png`,
         link_names: true
       })
     } catch (err) {
@@ -35,9 +35,9 @@ const initCommands = () => {
 
   app.command('/equalizer', async ({ ack, command, say }) => {
     ack()
-    const userName = command.user_name
+    const userId = command.user_id
     const message = await equalizer()
-    say(`${message}\n\n*from:* @${userName}`)
+    say(`${message}\n\n*from:* <@${userId}>`)
   })
 }
 
