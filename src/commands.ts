@@ -3,18 +3,29 @@ import { getChannelsList } from './functions'
 import equalizer from './equalizer'
 
 const initCommands = () => {
-  app.command('/kirika-say', async ({ ack, command, say }) => {
+  app.command('/kirika-say', async ({ ack, command, say, context }) => {
     ack()
+    await app.client.conversations.join({
+      token: context.botToken,
+      channel: command.channel_id
+    })
     say(`${command.text}:de-su:`)
   })
 
-  app.command('/kirika-channel-list', async ({ ack, context, say }) => {
-    ack()
-    const channelsListText = await getChannelsList({
-      token: context.botToken
-    })
-    say(channelsListText)
-  })
+  app.command(
+    '/kirika-channel-list',
+    async ({ ack, command, context, say }) => {
+      ack()
+      await app.client.conversations.join({
+        token: context.botToken,
+        channel: command.channel_id
+      })
+      const channelsListText = await getChannelsList({
+        token: context.botToken
+      })
+      say(channelsListText)
+    }
+  )
 
   app.command('/kirika-mahjong', async ({ ack, command, context }) => {
     ack()
