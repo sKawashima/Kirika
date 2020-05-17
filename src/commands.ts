@@ -32,12 +32,23 @@ const initCommands = () => {
 
     const userId = command.user_id
     try {
+      const notificationMessage = `@here ${
+        command.text !== '' ? `${command.text}:de-su:` : ''
+      }\n\n*from:* <@${userId}>\nhttps://hama-empire.slack.com/files/UECKGJR0B/F011XMYCK6C/pic-mj1.png`
       const postMessageResponce = await app.client.chat.postMessage({
         token: context.botToken,
         channel: '帝国麻雀部',
-        text: `@here ${
-          command.text !== '' ? `${command.text}:de-su:` : ''
-        }\n\n*from:* <@${userId}>\nhttps://hama-empire.slack.com/files/UECKGJR0B/F011XMYCK6C/pic-mj1.png`,
+        text: notificationMessage,
+        link_names: true
+      })
+
+      const urlMessage = `:one: https://tenhou.net/0/?L4545\n:two: https://tenhou.net/0/?L1919\n:three: https://tenhou.net/0/?L${`0000${Math.round(
+        Math.random() * 10000
+      )}`.slice(-4)}`
+      const postMessageResponce = await app.client.chat.postMessage({
+        token: context.botToken,
+        channel: '帝国麻雀部',
+        text: urlMessage,
         link_names: true
       })
     } catch (err) {
