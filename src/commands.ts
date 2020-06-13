@@ -34,7 +34,7 @@ const initCommands = () => {
     try {
       const notificationMessage = `@here ${
         command.text !== '' ? `${command.text}:de-su:` : ''
-      }\n\n*from:* <@${userId}>\nhttps://hama-empire.slack.com/files/UECKGJR0B/F011XMYCK6C/pic-mj1.png`
+      }\n\n*from:* <@${userId}>\nhttps://gyazo.com/cbdba92f976bd79da6c7accc51891b69`
       await app.client.chat.postMessage({
         token: context.botToken,
         channel: '帝国麻雀部',
