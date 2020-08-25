@@ -26,6 +26,15 @@ const initMessages = () => {
     const lgtmImageURL = lgtmList[Math.floor(Math.random() * lgtmList.length)]
     say(lgtmImageURL)
   })
+
+  app.message(/(疲れた|つかれた|しごおわ|おわり|終わり|終わった|おわった)/, ({say}) => {
+    const messages = [
+      'おつかれさま:desu:',
+      'おつかれさま:de-su:',
+      ':+1:'
+    ]
+    say(messages[Math.floor(Math.random() * messages.length)])
+  })
 }
 
 export default initMessages
