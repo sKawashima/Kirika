@@ -27,11 +27,18 @@ const initMessages = () => {
     say(lgtmImageURL)
   })
 
-  app.message(/(疲れた|つかれた|しごおわ|おわり|終わり|終わった|おわった)/, ({say}) => {
+  app.message(/(疲れた|つかれた|しごおわ|退勤|退社)/, ({say}) => {
     const messages = [
-      'おつかれさま:desu:',
-      'おつかれさま:de-su:',
-      ':+1:'
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:de-su::clap::tada:',
     ]
     say(messages[Math.floor(Math.random() * messages.length)])
   })
