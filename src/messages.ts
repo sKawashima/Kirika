@@ -29,9 +29,16 @@ const initMessages = () => {
 
   app.message(/(疲れた|つかれた|しごおわ|退勤|退社)/, ({say}) => {
     const messages = [
-      'おつかれさま:desu:',
-      'おつかれさま:de-su:',
-      ':+1:'
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:desu::+1:',
+      'おつかれさま:de-su::clap::tada:',
     ]
     say(messages[Math.floor(Math.random() * messages.length)])
   })
