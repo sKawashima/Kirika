@@ -42,6 +42,19 @@ const initMessages = () => {
     ]
     say(messages[Math.floor(Math.random() * messages.length)])
   })
+
+  app.message(/てま/, async ({ message, context }) => {
+    try {
+      await app.client.reactions.add({
+        token: context.botToken,
+        name: 'tema',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+    } catch(err) {
+      console.log(err)
+    }
+  })
 }
 
 export default initMessages
