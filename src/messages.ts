@@ -9,10 +9,6 @@ const initMessages = () => {
       ':de-su:',
       ':de-su:',
       ':de-su:',
-      ':de-su:',
-      ':de-su:',
-      ':de-su:',
-      ':de-su:',
       ':desu:',
       ':desu::desu::de-su:',
       ':dededede-su:',
@@ -29,11 +25,6 @@ const initMessages = () => {
 
   app.message(/(疲れた|つかれた|しごおわ|退勤|退社)/, ({say}) => {
     const messages = [
-      'おつかれさま:desu::+1:',
-      'おつかれさま:desu::+1:',
-      'おつかれさま:desu::+1:',
-      'おつかれさま:desu::+1:',
-      'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
