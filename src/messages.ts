@@ -1,5 +1,6 @@
 import app from './initBolt'
 import { lgtmList } from './imageList'
+import { getRandomKantoStation } from './randomStation'
 
 const initMessages = () => {
   app.message(/(でーす|デス|デース|desu|de-su|:dededede-su:)/, ({ say }) => {
@@ -23,13 +24,13 @@ const initMessages = () => {
     say(lgtmImageURL)
   })
 
-  app.message(/(疲れた|つかれた|しごおわ|退勤|退社)/, ({say}) => {
+  app.message(/(疲れた|つかれた|しごおわ|退勤|退社)/, ({ say }) => {
     const messages = [
       'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
-      'おつかれさま:de-su::clap::tada:',
+      'おつかれさま:de-su::clap::tada:'
     ]
     say(messages[Math.floor(Math.random() * messages.length)])
   })
@@ -42,9 +43,14 @@ const initMessages = () => {
         channel: message.channel,
         timestamp: message.ts
       })
-    } catch(err) {
+    } catch (err) {
       console.log(err)
     }
+  })
+
+  app.message(/(関東駅ガチャ|kantoekigacha)/, ({ say }) => {
+    const randomKantoStation = getRandomKantoStation()
+    say(`${randomKantoStation}:de-su:`)
   })
 }
 
