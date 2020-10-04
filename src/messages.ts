@@ -50,7 +50,9 @@ const initMessages = () => {
 
   app.message(/(関東駅ガチャ|kantoekigacha)/, ({ say }) => {
     const randomKantoStation = getRandomKantoStation()
-    say(`${randomKantoStation}:de-su:`)
+    say(
+      `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`
+    )
   })
 }
 
