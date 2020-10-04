@@ -48,7 +48,7 @@ const initMessages = () => {
     }
   })
 
-  app.message(/(関東駅ガチャ)/, ({ say }) => {
+  app.message(/(関東駅ガチャ|kantoekigacha)/, ({ say }) => {
     const randomKantoStation = getRandomKantoStation()
     say(`${randomKantoStation}:de-su:`)
   })
