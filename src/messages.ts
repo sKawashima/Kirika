@@ -55,13 +55,6 @@ const initMessages = () => {
       `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`
     )
   })
-
-  app.message(/(preEqualizer)/, async ({ say }) => {
-    say('preEqualizer:de-su:')
-    const message = await preEqualizer()
-
-    say(message)
-  })
 }
 
 export default initMessages
