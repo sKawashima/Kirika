@@ -56,7 +56,8 @@ const initMessages = () => {
     )
   })
 
-  app.message(/preEqualizer/, async ({ say }) => {
+  app.message(/(preEqualizer)/, async ({ say }) => {
+    say('preEqualizer:de-su:')
     const message = await preEqualizer()
 
     say(message)
