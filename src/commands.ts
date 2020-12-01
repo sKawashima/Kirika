@@ -63,7 +63,7 @@ const initCommands = () => {
     say(`${message}\n\n*from:* <@${userId}>`)
   })
 
-  app.command('/preEqualizer', async ({ ack, command, say }) => {
+  app.command('/preequalizer', async ({ ack, command, say }) => {
     ack()
     const userId = command.user_id
     const message = await preEqualizer()
