@@ -1,6 +1,7 @@
 import app from './initBolt'
 import { lgtmList } from './imageList'
 import { getRandomKantoStation } from './randomStation'
+import { preEqualizer } from './equalizer'
 
 const initMessages = () => {
   app.message(/(でーす|デス|デース|desu|de-su|:dededede-su:)/, ({ say }) => {
@@ -53,6 +54,12 @@ const initMessages = () => {
     say(
       `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`
     )
+  })
+
+  app.message(/preEqualizer/, async ({ say }) => {
+    const message = await preEqualizer()
+
+    say(message)
   })
 }
 
