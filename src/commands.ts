@@ -1,6 +1,6 @@
 import app from './initBolt'
 import { getChannelsList } from './functions'
-import equalizer from './equalizer'
+import equalizer, { preEqualizer } from './equalizer'
 
 const initCommands = () => {
   app.command('/kirika-say', async ({ ack, command, say, context }) => {
@@ -60,6 +60,13 @@ const initCommands = () => {
     ack()
     const userId = command.user_id
     const message = await equalizer()
+    say(`${message}\n\n*from:* <@${userId}>`)
+  })
+
+  app.command('/preEqualizer', async ({ ack, command, say }) => {
+    ack()
+    const userId = command.user_id
+    const message = await preEqualizer()
     say(`${message}\n\n*from:* <@${userId}>`)
   })
 }
