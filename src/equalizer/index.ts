@@ -38,7 +38,7 @@ export const preEqualizer = async () => {
   const data = await setupData()
   const now = new Date()
   const year = `${now.getFullYear()}`
-  const month = `0${now.getMonth() + 1 - 1}`.slice(-2)
+  const month = `0${now.getMonth()}`.slice(-2)
   const yearMonth = `${year}/${month}`
 
   const message = `現在入力されているデータでの精算情報:de-su:
