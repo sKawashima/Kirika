@@ -3,11 +3,11 @@ import dataToBurden from './dataToBurden'
 import dataToTextTable from './dataToTextTable'
 
 const equalizer = async () => {
-  const data = await setupData()
   const now = new Date()
   const year = `${now.getFullYear()}`
   const month = `0${now.getMonth() + 1}`.slice(-2)
   const yearMonth = `${year}/${month}`
+  const data = await setupData(yearMonth)
 
   const message = `現在入力されているデータでの精算情報:de-su:
 データ置き場
@@ -35,11 +35,11 @@ ${(dataToBurden(data.sKData) - dataToBurden(data.ryuData)) / 2 +
 export default equalizer
 
 export const preEqualizer = async () => {
-  const data = await setupData()
   const now = new Date()
   const year = `${now.getFullYear()}`
   const month = `0${now.getMonth()}`.slice(-2)
   const yearMonth = `${year}/${month}`
+  const data = await setupData(yearMonth)
 
   const message = `現在入力されているデータでの精算情報:de-su:
 データ置き場

@@ -4,16 +4,12 @@ import * as dotenv from 'dotenv'
 import getDataFromGitHub from './getDataFromGitHub'
 import formatSpritingBillsData from './formatSpritingBillsData'
 
-const setupData = async () => {
+const setupData = async (yearMonth: string) => {
   dotenv.config()
 
   const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN
   })
-  const now = new Date()
-  const year = `${now.getFullYear()}`
-  const month = `0${now.getMonth() + 1}`.slice(-2)
-  const yearMonth = `${year}/${month}`
 
   const sKFixedStringData = await getDataFromGitHub(
     `${yearMonth}/sK_fixed.txt`,
