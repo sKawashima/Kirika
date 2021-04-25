@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsnd src/index.ts",
     "start": "ts-node src/index.ts",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "test": "ts-node"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "@octokit/rest": "^17.6.0",
     "@slack/bolt": "^1.8.0",
     "@types/node": "^13.9.2",
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "text-table": "^0.2.0",
     "ts-node": "^8.10.1",
