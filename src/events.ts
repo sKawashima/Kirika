@@ -1,4 +1,5 @@
 import app from './initBolt'
+import { getTalkResponce } from './talk'
 
 const initEvents = () => {
   app.event('channel_created', async ({ event, context }) => {
@@ -14,8 +15,16 @@ const initEvents = () => {
     }
   })
 
-  app.event('app_mention', async ({ say }) => {
-    say(':de-su:')
+  app.event('app_mention', async ({ say, event, context }) => {
+    const reply = await getTalkResponce(
+      event.text.replace(`<@${context.botUserId}>`, '')
+    )
+    say(
+      `${reply.replace(/(です|ですよ|ですよね)$/u, '')}:de-su:`.replace(
+        /(ですか?:de-su:)$/u,
+        ':desu:か?:'
+      )
+    )
   })
 }
 
