@@ -10,6 +10,7 @@ export const getTalkResponce = async (message: string) => {
   return await axios
     .post('https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk', params)
     .then(res => {
+      if (res.data.message === 'empty reply') return ''
       return res.data.results[0].reply
     })
     .catch(e => {
