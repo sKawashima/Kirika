@@ -48,6 +48,19 @@ const initMessages = () => {
       console.log(err)
     }
   })
+  
+  app.message(/(二度手間|db5ce7cab50b.png)/, async ({ message, context }) => {
+    try {
+      await app.client.reactions.add({
+        token: context.botToken,
+        name: 'nidodema',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  })
 
   app.message(/(関東駅ガチャ|kantoekigacha)/, ({ say }) => {
     const randomKantoStation = getRandomKantoStation()
