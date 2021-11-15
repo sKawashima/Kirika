@@ -1,12 +1,16 @@
 export const lgtmList: string[] = [
+  'https://skawashima.github.io/images/LGTM/anime-ameria.gif',
   'https://skawashima.github.io/images/LGTM/atsumori.png',
+  'https://skawashima.github.io/images/LGTM/daijobuda.gif',
   'https://skawashima.github.io/images/LGTM/daijoubu.jpeg',
   'https://skawashima.github.io/images/LGTM/doraemon/cover.png',
   'https://skawashima.github.io/images/LGTM/doraemon/upper.png',
   'https://skawashima.github.io/images/LGTM/genbaneko/bakuha.png',
+  'https://skawashima.github.io/images/LGTM/genbaneko/bb.jpeg',
   'https://skawashima.github.io/images/LGTM/genbaneko/shiranaigayoshi.jpg',
   'https://skawashima.github.io/images/LGTM/genbaneko/yokuwakarangayoshi.jpg',
   'https://skawashima.github.io/images/LGTM/genbaneko/yoshi.jpeg',
+  'https://skawashima.github.io/images/LGTM/genbaneko/yoshiyoshi.gif',
   'https://skawashima.github.io/images/LGTM/kaguya/a-ii.png',
   'https://skawashima.github.io/images/LGTM/konosuba/2b.gif',
   'https://skawashima.github.io/images/LGTM/konosuba/akua-kyonu-.gif',
@@ -20,6 +24,7 @@ export const lgtmList: string[] = [
   'https://skawashima.github.io/images/LGTM/konosuba/yunyun-ed.png',
   'https://skawashima.github.io/images/LGTM/meu.png',
   'https://skawashima.github.io/images/LGTM/nagiasu/chisaki.gif',
+  'https://skawashima.github.io/images/LGTM/naruhodo.jpeg',
   'https://skawashima.github.io/images/LGTM/newgame/aoba-b.png',
   'https://skawashima.github.io/images/LGTM/newgame/aoba-kirakira.png',
   'https://skawashima.github.io/images/LGTM/newgame/aoba-tell.png',
@@ -45,6 +50,5 @@ export const lgtmList: string[] = [
   'https://skawashima.github.io/images/LGTM/seishinryokudekatsu.png',
   'https://skawashima.github.io/images/LGTM/symphogear/ikirunowoakirameruna.png',
   'https://skawashima.github.io/images/LGTM/symphogear/kurisu-sinaifogia.gif',
-  'https://skawashima.github.io/images/LGTM/yoshi-NYN.jpeg',
   'https://skawashima.github.io/images/LGTM/yurucamp/nadesiko-y.png'
 ]
