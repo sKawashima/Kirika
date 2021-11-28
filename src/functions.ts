@@ -29,7 +29,7 @@ export const diceroll = (command: string) => {
   const diceResult = [...Array(Number(numbers[1]))].map(() =>
     Math.floor(Math.random() * Number(numbers[2]) + 1)
   )
-  const message = `${numbers[0]}:de-su
+  const message = `${numbers[0]}:de-su:
 
 ${diceResult.map(number => `${number}`).reduce((pre, crr) => `${pre}\n${crr}`)}
 合計: ${diceResult.reduce((pre, cur) => pre + cur)}
