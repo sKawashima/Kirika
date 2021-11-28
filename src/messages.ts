@@ -1,7 +1,7 @@
 import app from './initBolt'
 import { lgtmList } from './imageList'
 import { getRandomKantoStation } from './randomStation'
-import { preEqualizer } from './equalizer'
+import { diceroll } from './functions'
 
 const initMessages = () => {
   app.message(/(でーす|デス|デース|desu|de-su|:dededede-su:)/, ({ say }) => {
@@ -48,7 +48,7 @@ const initMessages = () => {
       console.log(err)
     }
   })
-  
+
   app.message(/(二度手間|db5ce7cab50b.png)/, async ({ message, context }) => {
     try {
       await app.client.reactions.add({
@@ -67,6 +67,10 @@ const initMessages = () => {
     say(
       `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`
     )
+  })
+  app.message(/^\d+d\d+/, ({ say, message }) => {
+    const result = diceroll(message.text)
+    say(result)
   })
 }
 
