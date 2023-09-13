@@ -1,4 +1,4 @@
-import { Octokit, RestEndpointMethodTypes } from '@octokit/rest'
+import { Octokit } from '@octokit/rest'
 import * as dotenv from 'dotenv'
 
 import getDataFromGitHub from './getDataFromGitHub'
