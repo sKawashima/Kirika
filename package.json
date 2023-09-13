@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "lint-staged": "^14.0.1",
-    "modern-node": "^2.5.1",
+    "modern-node": "^2.9.0",
     "prettier-standard": "^15.0.1"
   },
   "lint-staged": {
