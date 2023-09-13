@@ -7,7 +7,8 @@
     "dev": "tsnd src/index.ts",
     "start": "ts-node src/index.ts",
     "precommit": "lint-staged",
-    "test": "ts-node"
+    "test": "ts-node",
+    "type-check": "tsc src/**/*.ts --noEmit --esModuleInterop"
   },
   "repository": {
     "type": "git",
@@ -21,20 +22,20 @@
   },
   "homepage": "https://github.com/sKawashima/Kirika#readme",
   "dependencies": {
-    "@octokit/rest": "^17.6.0",
-    "@slack/bolt": "^1.8.0",
-    "@types/node": "^13.9.2",
-    "axios": "^0.21.2",
-    "dotenv": "^8.2.0",
+    "@octokit/rest": "^20.0.1",
+    "@slack/bolt": "^3.13.3",
+    "@types/node": "^20.6.0",
+    "axios": "^1.5.0",
+    "dotenv": "^16.3.1",
     "text-table": "^0.2.0",
-    "ts-node": "^8.10.1",
-    "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.8.3"
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "lint-staged": "^10.0.9",
-    "modern-node": "^2.7.0",
-    "prettier-standard": "^16.2.1"
+    "lint-staged": "^14.0.1",
+    "modern-node": "^2.5.1",
+    "prettier-standard": "^15.0.1"
   },
   "lint-staged": {
     "**/*": [

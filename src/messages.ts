@@ -4,28 +4,31 @@ import { getRandomKantoStation } from './randomStation'
 import { diceroll } from './functions'
 
 const initMessages = () => {
-  app.message(/(でーす|デス|デース|desu|de-su|:dededede-su:)/, ({ say }) => {
-    const messages = [
-      ':de-su:',
-      ':de-su:',
-      ':de-su:',
-      ':de-su:',
-      ':de-su:',
-      ':desu:',
-      ':desu::desu::de-su:',
-      ':dededede-su:',
-      'https://lohas.nicoseiga.jp/thumb/5661682i',
-      'https://pbs.twimg.com/media/Dal0dcJV4AEaY0p.jpg'
-    ]
-    say(messages[Math.floor(Math.random() * messages.length)])
-  })
+  app.message(
+    /(でーす|デス|デース|desu|de-su|:dededede-su:)/,
+    async ({ say }) => {
+      const messages = [
+        ':de-su:',
+        ':de-su:',
+        ':de-su:',
+        ':de-su:',
+        ':de-su:',
+        ':desu:',
+        ':desu::desu::de-su:',
+        ':dededede-su:',
+        'https://lohas.nicoseiga.jp/thumb/5661682i',
+        'https://pbs.twimg.com/media/Dal0dcJV4AEaY0p.jpg'
+      ]
+      await say(messages[Math.floor(Math.random() * messages.length)])
+    }
+  )
 
   app.message(/(LGTM|lgtm)/, async ({ say }) => {
     const lgtmImageURL = lgtmList[Math.floor(Math.random() * lgtmList.length)]
-    say(lgtmImageURL)
+    await say(lgtmImageURL)
   })
 
-  app.message(/(疲れた|つかれた|しごおわ|退勤|退社)/, ({ say }) => {
+  app.message(/(疲れた|つかれた|しごおわ|退勤|退社)/, async ({ say }) => {
     const messages = [
       'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
@@ -33,7 +36,7 @@ const initMessages = () => {
       'おつかれさま:desu::+1:',
       'おつかれさま:de-su::clap::tada:'
     ]
-    say(messages[Math.floor(Math.random() * messages.length)])
+    await say(messages[Math.floor(Math.random() * messages.length)])
   })
 
   app.message(/(てま|tema)/, async ({ message, context }) => {
@@ -62,15 +65,16 @@ const initMessages = () => {
     }
   })
 
-  app.message(/(関東駅ガチャ|kantoekigacha)/, ({ say }) => {
-    const randomKantoStation = getRandomKantoStation()
-    say(
+  app.message(/(関東駅ガチャ|kantoekigacha)/, async ({ say }) => {
+    const randomKantoStation = await getRandomKantoStation()
+    await say(
       `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`
     )
   })
-  app.message(/^\d+d\d+/, ({ say, message }) => {
-    const result = diceroll(message.text)
-    say(result)
+  app.message(/^\d+d\d+/, async ({ say, message }) => {
+    // @ts-ignore
+    const result = await diceroll(message.text)
+    await say(result)
   })
 }
 

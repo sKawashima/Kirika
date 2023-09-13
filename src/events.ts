@@ -4,7 +4,7 @@ import { getTalkResponce } from './talk'
 const initEvents = () => {
   app.event('channel_created', async ({ event, context }) => {
     try {
-      const postMessageResponce = await app.client.chat.postMessage({
+      await app.client.chat.postMessage({
         token: context.botToken,
         channel: 'general',
         text: `新しいチャンネル :de-su: :eyes:\n#${event.channel.name}`,
@@ -19,7 +19,7 @@ const initEvents = () => {
     const reply = await getTalkResponce(
       event.text.replace(`<@${context.botUserId}>`, '')
     )
-    say(
+    await say(
       `${reply.replace(/(です|ですよ|ですよね)$/u, '')}:de-su:`.replace(
         /(ですか?:de-su:)$/u,
         ':desu:か?:'
