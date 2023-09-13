@@ -22,7 +22,7 @@
   "homepage": "https://github.com/sKawashima/Kirika#readme",
   "dependencies": {
     "@octokit/rest": "^17.6.0",
-    "@slack/bolt": "^1.8.0",
+    "@slack/bolt": "^3.13.3",
     "@types/node": "^13.9.2",
     "axios": "^0.21.2",
     "dotenv": "^8.2.0",
@@ -33,8 +33,8 @@
   },
   "devDependencies": {
     "lint-staged": "^10.0.9",
-    "modern-node": "^2.7.0",
-    "prettier-standard": "^16.2.1"
+    "modern-node": "^2.5.1",
+    "prettier-standard": "^15.0.1"
   },
   "lint-staged": {
     "**/*": [
