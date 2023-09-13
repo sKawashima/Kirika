@@ -15,7 +15,9 @@ export const getChannelsList = async ({ token }) => {
     let channelsListText = ''
     getChannelsListResponce.channels.forEach(channel => {
       if (!channel.is_archived)
-        channelsListText += `<#${channel.id}|${channel.name}> ${channel.purpose.value}\n`
+        channelsListText += `<#${channel.id}|${channel.name}> ${
+          channel.purpose.value
+        }\n`
     })
 
     return `チャンネル一覧 :de-su:\n\n${channelsListText}`
@@ -24,7 +26,7 @@ export const getChannelsList = async ({ token }) => {
   }
 }
 
-export const diceroll = (command: string) => {
+export const diceroll = async (command: string) => {
   const numbers = command.match(/(\d+)d(\d+)/)
   const diceResult = [...Array(Number(numbers[1]))].map(() =>
     Math.floor(Math.random() * Number(numbers[2]) + 1)

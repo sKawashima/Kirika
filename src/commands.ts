@@ -4,18 +4,18 @@ import equalizer, { preEqualizer } from './equalizer'
 
 const initCommands = () => {
   app.command('/kirika-say', async ({ ack, command, say, context }) => {
-    ack()
+    await ack()
     await app.client.conversations.join({
       token: context.botToken,
       channel: command.channel_id
     })
-    say(`${command.text}:de-su:`)
+    await say(`${command.text}:de-su:`)
   })
 
   app.command(
     '/kirika-channel-list',
     async ({ ack, command, context, say }) => {
-      ack()
+      await ack()
       await app.client.conversations.join({
         token: context.botToken,
         channel: command.channel_id
@@ -23,12 +23,12 @@ const initCommands = () => {
       const channelsListText = await getChannelsList({
         token: context.botToken
       })
-      say(channelsListText)
+      await say(channelsListText)
     }
   )
 
   app.command('/kirika-mahjong', async ({ ack, command, context }) => {
-    ack()
+    await ack()
 
     const userId = command.user_id
     try {
@@ -57,17 +57,17 @@ const initCommands = () => {
   })
 
   app.command('/equalizer', async ({ ack, command, say }) => {
-    ack()
+    await ack()
     const userId = command.user_id
     const message = await equalizer()
-    say(`${message}\n\n*from:* <@${userId}>`)
+    await say(`${message}\n\n*from:* <@${userId}>`)
   })
 
   app.command('/preequalizer', async ({ ack, command, say }) => {
-    ack()
+    await ack()
     const userId = command.user_id
     const message = await preEqualizer()
-    say(`${message}\n\n*from:* <@${userId}>`)
+    await say(`${message}\n\n*from:* <@${userId}>`)
   })
 }
 
