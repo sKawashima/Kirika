@@ -18,3 +18,9 @@ npm i
 # Run the bot
 npm run dev
 ```
+
+## Usage
+
+- connect to slack
+  - ngrok http 3000
+  - Replace: Slack API Event Subscriptions -> Request URL (add `/slack/events`)
