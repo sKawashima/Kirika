@@ -32,7 +32,7 @@ turndownService.addRule('ignoreScriptStyleSvg', {
   }
 })
 
-export const fetchText = async (url: string) => {
+const fetchText = async (url: string) => {
   try {
     const { data: html } = await axios.get(url)
     const markdown = parseHTMLToMarkdown(html)
@@ -59,4 +59,9 @@ const parseHTMLToMarkdown = (html: string) => {
   const markdown = turndownService.turndown(bodyHtml)
 
   return markdown
+}
+
+export const fetchTextFromUrls = async (urls: string[]) => {
+  const fetchedTexts = await Promise.all(urls.map(fetchText))
+  return fetchedTexts.join('\n---\n')
 }

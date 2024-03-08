@@ -1,5 +1,5 @@
 import app from './initBolt'
-import { fetchText } from './summarizer/fetchText'
+import { fetchTextFromUrls } from './summarizer/fetchText'
 
 const getUrl = (text: string) => {
   const urlPattern = /<(https?:\/\/[^\s]+)>/g
@@ -28,8 +28,8 @@ const initEvents = () => {
     console.log(urls)
 
     if (urls.length > 0) {
-      const body = await fetchText(urls[0])
-      console.log(body)
+      const fetchedMarkdowns = await fetchTextFromUrls(urls)
+      console.log(fetchedMarkdowns)
       say({
         text: `見つかったURL: ${urls.join(', ')}`,
         thread_ts
@@ -49,6 +49,7 @@ const initEvents = () => {
             .filter(u => u)
         )
       )
+      const fetchedMarkdowns = await fetchTextFromUrls(urlInReplies)
 
       if (!replies.messages || replies.messages.length === 1) {
         return
