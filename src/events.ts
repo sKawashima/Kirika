@@ -1,5 +1,6 @@
 import app from './initBolt'
 import { fetchTextFromUrls } from './summarizer/fetchText'
+import { generateMessage } from './summarizer/generateMessage'
 
 const getUrl = (text: string) => {
   const urlPattern = /<(https?:\/\/[^\s]+)>/g
@@ -29,9 +30,10 @@ const initEvents = () => {
 
     if (urls.length > 0) {
       const fetchedMarkdowns = await fetchTextFromUrls(urls)
-      console.log(fetchedMarkdowns)
+      const message = await generateMessage(fetchedMarkdowns)
+
       say({
-        text: `見つかったURL: ${urls.join(', ')}`,
+        text: message,
         thread_ts
       })
     } else {
