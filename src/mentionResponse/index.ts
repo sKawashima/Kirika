@@ -24,7 +24,7 @@ export const mentionResponse = async ({
     const fetchedMarkdowns = await fetchTextFromUrls(urls)
     if (!fetchedMarkdowns) {
       say({
-        text: 'エラー：ページを取得できませんでした',
+        text: 'エラー：URLのサーバーに弾かれたためページを取得できませんでした',
         thread_ts
       })
       return
@@ -60,7 +60,7 @@ export const mentionResponse = async ({
       )
       const desu = Math.random() < 0.8 ? ' :desu:' : ' :de-su:'
       say({
-        text: message.replace(/(です|)。/g, desu),
+        text: message.replace(/(です|)。/g, desu).replace(/です/g, ':desu:'),
         thread_ts
       })
       return
@@ -69,7 +69,7 @@ export const mentionResponse = async ({
     const fetchedMarkdowns = await fetchTextFromUrls(urlInReplies)
     if (!fetchedMarkdowns) {
       say({
-        text: 'エラー：ページを取得できませんでした',
+        text: 'エラー：URLのサーバーに弾かれたためページを取得できませんでした',
         thread_ts
       })
       return
