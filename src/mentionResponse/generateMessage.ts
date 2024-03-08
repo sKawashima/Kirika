@@ -29,3 +29,27 @@ export const generateSummaryMessage = async (text: string) => {
     return `エラーが発生しました。: ${error}`
   }
 }
+
+const GENERAL_SYSTEM_PROMPT = `
+You are an excellent assistant.
+
+Please limit your answer to one sentence only.
+You will answer in Japanese unless otherwise instructed by the user.
+`
+
+export const generateMessage = async (text: string) => {
+  try {
+    const res = await openai.chat.completions.create({
+      model: 'gpt-4-turbo-preview',
+      messages: [
+        { role: 'system', content: GENERAL_SYSTEM_PROMPT },
+        { role: 'user', content: text }
+      ],
+      temperature: 0
+    })
+
+    return res.choices[0].message.content
+  } catch (error) {
+    return `エラーが発生しました。: ${error}`
+  }
+}

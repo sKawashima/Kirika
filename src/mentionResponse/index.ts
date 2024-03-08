@@ -1,6 +1,6 @@
 import { AppMentionEvent, Context, SayFn } from '@slack/bolt'
 import { fetchTextFromUrls } from './fetchText'
-import { generateSummaryMessage } from './generateMessage'
+import { generateMessage, generateSummaryMessage } from './generateMessage'
 import { getUrl } from './getUrl'
 import { StringIndexed } from '@slack/bolt/dist/types/helpers'
 import { WebClient } from '@slack/web-api'
@@ -53,14 +53,16 @@ export const mentionResponse = async ({
     )
 
     if (urlInReplies.length === 0) {
+      const message = await generateMessage(
+        replies.messages
+          .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
+          .join('\n---\n')
+      )
+      const desu = Math.random() < 0.8 ? ' :desu:' : ' :de-su:'
       say({
-        text: 'エラー：URLが見つかりませんでした',
+        text: message.replace(/(です|)。/g, desu),
         thread_ts
       })
-      return
-    }
-
-    if (!replies.messages || replies.messages.length === 1) {
       return
     }
 
@@ -79,7 +81,9 @@ ${fetchedMarkdowns}
 
 ---
 Past Conversations:
-${replies.messages.map(m => m.text).join('\n---\n')}
+${replies.messages
+  .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
+  .join('\n---\n')}
 `)
 
     say({
