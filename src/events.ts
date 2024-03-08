@@ -1,9 +1,10 @@
 import app from './initBolt'
+import { fetchText } from './summarizer/fetchText'
 
 const getUrl = (text: string) => {
   const urlPattern = /<(https?:\/\/[^\s]+)>/g
-  const urls = text.match(urlPattern) || []
-  return urls
+  const matches = text.match(urlPattern) || []
+  return matches.map((url: string) => url.slice(1, -1))
 }
 
 const initEvents = () => {
@@ -24,8 +25,11 @@ const initEvents = () => {
     const thread_ts = event.thread_ts || event.ts
 
     const urls = getUrl(event.text)
+    console.log(urls)
 
     if (urls.length > 0) {
+      const body = await fetchText(urls[0])
+      console.log(body)
       say({
         text: `見つかったURL: ${urls.join(', ')}`,
         thread_ts
@@ -37,10 +41,14 @@ const initEvents = () => {
         ts: thread_ts
       })
 
-      const urlInReplies = replies.messages
-        .map(m => getUrl(m.text))
-        .flat()
-        .filter(u => u)
+      const urlInReplies = Array.from(
+        new Set(
+          replies.messages
+            .map(m => getUrl(m.text))
+            .flat()
+            .filter(u => u)
+        )
+      )
 
       if (!replies.messages || replies.messages.length === 1) {
         return
