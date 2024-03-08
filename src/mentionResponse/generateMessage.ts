@@ -13,19 +13,19 @@ If there is a question that is not in the article, we answer honestly, "There is
 You will answer in Japanese unless otherwise instructed by the user.
 `
 
-export const generateMessage = async (text: string) => {
-  const res = await openai.chat.completions.create({
-    model: 'gpt-4-turbo-preview',
-    messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
-      { role: 'user', content: text }
-    ],
-    temperature: 0
-  })
+export const generateSummaryMessage = async (text: string) => {
+  try {
+    const res = await openai.chat.completions.create({
+      model: 'gpt-4-turbo-preview',
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: text }
+      ],
+      temperature: 0
+    })
 
-  if (!res.choices[0]) {
-    return 'エラーが発生しました。'
+    return res.choices[0].message.content
+  } catch (error) {
+    return `エラーが発生しました。: ${error}`
   }
-
-  return res.choices[0].message.content
 }
