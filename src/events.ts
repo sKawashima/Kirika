@@ -26,10 +26,17 @@ const initEvents = () => {
     const thread_ts = event.thread_ts || event.ts
 
     const urls = getUrl(event.text)
-    console.log(urls)
 
     if (urls.length > 0) {
       const fetchedMarkdowns = await fetchTextFromUrls(urls)
+      if (!fetchedMarkdowns) {
+        say({
+          text: 'エラー：ページを取得できませんでした',
+          thread_ts
+        })
+        return
+      }
+
       const message = await generateMessage(fetchedMarkdowns)
 
       say({
@@ -51,17 +58,39 @@ const initEvents = () => {
             .filter(u => u)
         )
       )
-      const fetchedMarkdowns = await fetchTextFromUrls(urlInReplies)
+
+      if (urlInReplies.length === 0) {
+        say({
+          text: 'エラー：URLが見つかりませんでした',
+          thread_ts
+        })
+        return
+      }
 
       if (!replies.messages || replies.messages.length === 1) {
         return
       }
 
-      console.log(replies.messages.map(m => m.text).join('\n---\n'))
-      console.log(urlInReplies)
+      const fetchedMarkdowns = await fetchTextFromUrls(urlInReplies)
+      if (!fetchedMarkdowns) {
+        say({
+          text: 'エラー：ページを取得できませんでした',
+          thread_ts
+        })
+        return
+      }
+
+      const message = await generateMessage(`
+ArticleContents:
+${fetchedMarkdowns}
+
+---
+Past Conversations:
+${replies.messages.map(m => m.text).join('\n---\n')}
+`)
 
       say({
-        text: 'URLは見つかりませんでした',
+        text: message,
         thread_ts
       })
     }
