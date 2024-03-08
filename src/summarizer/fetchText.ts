@@ -9,7 +9,22 @@ turndownService.addRule('ignoreScriptStyleSvg', {
       node.nodeName === 'SCRIPT' ||
       node.nodeName === 'STYLE' ||
       node.nodeName === 'SVG' ||
-      node.nodeName === 'IMG'
+      node.nodeName === 'IMG' ||
+      node.nodeName === 'IFRAME' ||
+      node.nodeName === 'VIDEO' ||
+      node.nodeName === 'AUDIO' ||
+      node.nodeName === 'CANVAS' ||
+      node.nodeName === 'EMBED' ||
+      node.nodeName === 'OBJECT' ||
+      node.nodeName === 'INPUT' ||
+      node.nodeName === 'TEXTAREA' ||
+      node.nodeName === 'SELECT' ||
+      node.nodeName === 'OPTION' ||
+      node.nodeName === 'BUTTON' ||
+      node.nodeName === 'HEADER' ||
+      node.nodeName === 'FOOTER' ||
+      node.nodeName === 'NAV' ||
+      node.textContent === ''
     )
   },
   replacement: function () {
