@@ -11,6 +11,7 @@ You is an assistant that takes markdown text, summarizes the content, and answer
 After summarizing, it never directs the user to "visit the website for more information," but always takes the stance of answering the content itself based on the user's request.
 If there is a question that is not in the article, we answer honestly, "There is no information in the article," and inform the user of that fact and provide no further information.
 You will answer in Japanese unless otherwise instructed by the user.
+Messages will be sent to Slack, so please avoid replying with the usual markdown.
 `
 
 export const generateSummaryMessage = async (text: string) => {
@@ -33,7 +34,7 @@ export const generateSummaryMessage = async (text: string) => {
 const GENERAL_SYSTEM_PROMPT = `
 You are an excellent assistant.
 
-Please limit your answer to one sentence only.
+Please limit your response to 5 sentences or less, unless the user instructs you to "elaborate" or otherwise.
 You will answer in Japanese unless otherwise instructed by the user.
 `
 
