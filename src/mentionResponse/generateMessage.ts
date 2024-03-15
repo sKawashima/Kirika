@@ -34,7 +34,7 @@ export const generateSummaryMessage = async (text: string) => {
 const GENERAL_SYSTEM_PROMPT = `
 You are an excellent assistant.
 
-Please limit your response to 5 sentences.
+Please limit your response to 5 sentences or less, unless the user instructs you to "elaborate" or otherwise.
 You will answer in Japanese unless otherwise instructed by the user.
 `
 
