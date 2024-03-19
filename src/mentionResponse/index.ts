@@ -59,7 +59,7 @@ export const mentionResponse = async ({
           .join('\n---\n')
       )
       const desuReplacement = () => Math.random() < 0.8 ? ' :desu: ' : ':de-su: ';
-      const modifiedMessage = `${message.replace(/(です|)。/g, desuReplacement + '。')}`;
+      const modifiedMessage = `${message.replace(/(です|)。/g, desuReplacement() + '。')}`;
       say({ text: modifiedMessage.endsWith(':desu:。') || modifiedMessage.endsWith(':de-su:。') ? modifiedMessage.slice(0, -1) : modifiedMessage.endsWith('。') ? modifiedMessage.slice(0, -1) + desuReplacement() : modifiedMessage + desuReplacement(), thread_ts });
       return
     }
