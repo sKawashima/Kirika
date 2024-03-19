@@ -58,7 +58,8 @@ export const mentionResponse = async ({
           .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
           .join('\n---\n')
       )
-      const modifiedMessage = message.replace(/です/g, () => Math.random() < 0.8 ? ' :desu: ' : ':de-su: ') + ':desu:';
+      const desuReplacement = () => Math.random() < 0.8 ? ' :desu: ' : ':de-su: ';
+      const modifiedMessage = `${message.replace(/です/g, desuReplacement)}:desu:`;
       say({ text: modifiedMessage, thread_ts });
       return
     }
