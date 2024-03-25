@@ -58,9 +58,24 @@ export const mentionResponse = async ({
           .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
           .join('\n---\n')
       )
-      const desuReplacement = () => Math.random() < 0.8 ? ' :desu:' : ':de-su:';
-      const modifiedMessage = `${message.replace(/(です|)。/g, desuReplacement() + '。')}`;
-      say({ text: modifiedMessage.endsWith(':desu:') || modifiedMessage.endsWith(':de-su:') || modifiedMessage.endsWith(':desu:。') || modifiedMessage.endsWith(':de-su:。') ? modifiedMessage : modifiedMessage.endsWith('。') ? modifiedMessage.slice(0, -1) + desuReplacement() : modifiedMessage + desuReplacement(), thread_ts });
+      const desuReplacement = () =>
+        Math.random() < 0.8 ? ' :desu:' : ':de-su:'
+      const modifiedMessage = `${message.replace(
+        /(です|)。/g,
+        desuReplacement() + '。'
+      )}`
+      say({
+        text:
+          modifiedMessage.endsWith(':desu:') ||
+          modifiedMessage.endsWith(':de-su:') ||
+          modifiedMessage.endsWith(':desu:。') ||
+          modifiedMessage.endsWith(':de-su:。')
+            ? modifiedMessage
+            : modifiedMessage.endsWith('。')
+            ? modifiedMessage.slice(0, -1) + desuReplacement()
+            : modifiedMessage + desuReplacement(),
+        thread_ts
+      })
       return
     }
 

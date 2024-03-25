@@ -45,5 +45,5 @@ export const lgtmList: string[] = [
   'https://skawashima.github.io/images/LGTM/seishinryokudekatsu.png',
   'https://skawashima.github.io/images/LGTM/symphogear/ikirunowoakirameruna.png',
   'https://skawashima.github.io/images/LGTM/symphogear/kurisu-sinaifogia.gif',
-  'https://skawashima.github.io/images/LGTM/yurucamp/nadesiko-y.png',
+  'https://skawashima.github.io/images/LGTM/yurucamp/nadesiko-y.png'
 ]
