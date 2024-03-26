@@ -26,7 +26,7 @@
     "@slack/bolt": "^3.13.3",
     "@types/node": "^20.6.0",
     "axios": "^1.6.7",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "jsdom": "^24.0.0",
     "openai": "^4.28.4",
     "text-table": "^0.2.0",
