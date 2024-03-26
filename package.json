@@ -24,7 +24,7 @@
   "dependencies": {
     "@octokit/rest": "^20.0.1",
     "@slack/bolt": "^3.13.3",
-    "@types/node": "^20.6.0",
+    "@types/node": "^20.11.30",
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
     "jsdom": "^24.0.0",
