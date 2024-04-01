@@ -25,7 +25,7 @@
     "@octokit/rest": "^20.0.2",
     "@slack/bolt": "^3.13.3",
     "@types/node": "^20.11.30",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "jsdom": "^24.0.0",
     "openai": "^4.28.4",
