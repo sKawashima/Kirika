@@ -66,13 +66,13 @@ export const mentionResponse = async ({
       )}`
       say({
         text:
-          modifiedMessage.endsWith(':desu:') ||
-          modifiedMessage.endsWith(':de-su:') ||
-          modifiedMessage.endsWith(':desu:。') ||
-          modifiedMessage.endsWith(':de-su:。')
+          modifiedMessage.endsWith(':desu:\n') ||
+          modifiedMessage.endsWith(':de-su:\n') ||
+          modifiedMessage.endsWith(':desu:。\n') ||
+          modifiedMessage.endsWith(':de-su:。\n')
             ? modifiedMessage
-            : modifiedMessage.endsWith('。')
-            ? modifiedMessage.slice(0, -1) + desuReplacement()
+            : modifiedMessage.endsWith('。\n')
+            ? modifiedMessage.slice(0, -2) + desuReplacement()
             : modifiedMessage + desuReplacement(),
         thread_ts
       })
