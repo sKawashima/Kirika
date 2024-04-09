@@ -62,7 +62,7 @@ export const mentionResponse = async ({
         Math.random() < 0.8 ? ' :desu:' : ':de-su:'
       const modifiedMessage = `${message.replace(
         /(です|)。/g,
-        desuReplacement() + '。'
+        desuReplacement() + '。\n'
       )}`
       say({
         text:
