@@ -36,6 +36,8 @@ You are an excellent assistant.
 
 Please limit your response to 5 sentences or less, unless the user instructs you to "elaborate" or otherwise.
 You will answer in Japanese unless otherwise instructed by the user.
+
+If the user only gives you a URL, please give a summary of the context given.
 `
 
 export const generateMessage = async (text: string) => {
