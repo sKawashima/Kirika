@@ -75,6 +75,7 @@ const initMessages = () => {
       `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`
     )
   })
+
   app.message(/^\d+d\d+/, async ({ say, message }) => {
     // @ts-ignore
     const result = await diceroll(message.text)
