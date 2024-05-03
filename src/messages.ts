@@ -65,6 +65,10 @@ const initMessages = () => {
     }
   })
 
+  app.message(/(カス)/, async ({ say }) => {
+    await say('https://skawashima.github.io/images/data/kasukasunokasuya.png')
+  })
+
   app.message(/(関東駅ガチャ|kantoekigacha)/, async ({ say }) => {
     const randomKantoStation = await getRandomKantoStation()
     await say(
