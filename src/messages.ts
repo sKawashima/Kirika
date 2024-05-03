@@ -65,12 +65,17 @@ const initMessages = () => {
     }
   })
 
+  app.message(/(カス)/, async ({ say }) => {
+    await say('https://skawashima.github.io/images/data/kasukasunokasuya.png')
+  })
+
   app.message(/(関東駅ガチャ|kantoekigacha)/, async ({ say }) => {
     const randomKantoStation = await getRandomKantoStation()
     await say(
       `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`
     )
   })
+
   app.message(/^\d+d\d+/, async ({ say, message }) => {
     // @ts-ignore
     const result = await diceroll(message.text)
