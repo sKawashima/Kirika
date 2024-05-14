@@ -17,7 +17,7 @@ Messages will be sent to Slack, so please avoid replying with the usual markdown
 export const generateSummaryMessage = async (text: string) => {
   try {
     const res = await openai.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4o',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: text }
@@ -43,7 +43,7 @@ If the user only gives you a URL, please give a summary of the context given.
 export const generateMessage = async (text: string) => {
   try {
     const res = await openai.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4o',
       messages: [
         { role: 'system', content: GENERAL_SYSTEM_PROMPT },
         { role: 'user', content: text }
