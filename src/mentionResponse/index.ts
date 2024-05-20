@@ -96,7 +96,7 @@ ${fetchedMarkdowns}
 Past Conversations:
 ${replies.messages
   .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
-  .join('\n---\n')}
+  .join('\n---\n') + '\n---\n' + `user: ${event.text}`}
 `)
 
     say({
