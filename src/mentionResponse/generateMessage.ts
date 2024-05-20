@@ -13,11 +13,11 @@ Break line after each sentence.
 If the user only gives you a URL, please give a summary of the contents.
 When summarizing, please follow the format below:
 """
-:zatsu:*まとめ*
+*3行まとめ*
 <short and simple three-sentence summary>
 
 ---
-:memo:*内容*
+*内容*
 <detailed summary as possible>
 """
 
@@ -25,9 +25,7 @@ If the user asks a question, please answer it based on ArticleContents.
 If there is a question that is not in the article, please answer, "There is no information in the article," and provide no further information.
 
 Answer in Japanese unless otherwise instructed by the user.
-Answer in plain text.
-
-Use the following notations in bold: *bold text*
+Please use the ですます調 in Japanese.
 `
 
 export const generateSummaryMessage = async (text: string) => {
