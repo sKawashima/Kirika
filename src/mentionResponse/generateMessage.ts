@@ -13,11 +13,11 @@ Break line after each sentence.
 If the user only gives you a URL, please give a summary of the contents.
 When summarizing, please follow the format below:
 """
-:zatsu:*まとめ*
+*3行まとめ*
 <short and simple three-sentence summary>
 
 ---
-:memo:*内容*
+*内容*
 <detailed summary as possible>
 """
 
