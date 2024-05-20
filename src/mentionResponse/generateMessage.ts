@@ -25,9 +25,7 @@ If the user asks a question, please answer it based on ArticleContents.
 If there is a question that is not in the article, please answer, "There is no information in the article," and provide no further information.
 
 Answer in Japanese unless otherwise instructed by the user.
-Answer in plain text.
-
-Use the following notations in bold: *bold text*
+Please use the ですます調 in Japanese.
 `
 
 export const generateSummaryMessage = async (text: string) => {
