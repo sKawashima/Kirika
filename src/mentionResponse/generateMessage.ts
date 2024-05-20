@@ -8,13 +8,12 @@ const openai = new OpenAI({
 
 const SYSTEM_PROMPT = `
 You are an assistant that takes markdown text, summarizes the content, and answers questions about that content.
-Break line after each sentence.
 
 If the user only gives you a URL, please give a summary of the contents.
 When summarizing, please follow the format below:
 """
 *3行まとめ*
-<short and simple three-sentence summary>
+<short and simple three-sentence summary (break line after each sentence)>
 
 ---
 *内容*
