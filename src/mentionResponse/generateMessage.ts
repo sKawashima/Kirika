@@ -17,7 +17,7 @@ If the user has provided only a URL and you would like to summarize, please foll
 
 ---
 *内容*
-<detailed summary as possible>
+<detailed summary (as much detail as possible)>
 """
 
 If the user asks a question, please answer it based on ArticleContents.
