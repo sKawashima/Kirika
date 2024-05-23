@@ -24,7 +24,6 @@ const initMessages = () => {
   )
 
   app.message(/(LGTM|lgtm)/, async ({ say, message }) => {
-    console.log(message)
     if(message.subtype && (message.subtype === 'bot_message' || 'slackbot_response')) return
 
     const lgtmImageURL = lgtmList[Math.floor(Math.random() * lgtmList.length)]
