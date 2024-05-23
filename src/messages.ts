@@ -23,7 +23,8 @@ const initMessages = () => {
     }
   )
 
-  app.message(/(LGTM|lgtm)/, async ({ say }) => {
+  app.message(/(LGTM|lgtm)/, async ({ say, context }) => {
+    if(context.botId) return
     const lgtmImageURL = lgtmList[Math.floor(Math.random() * lgtmList.length)]
     await say(lgtmImageURL)
   })
