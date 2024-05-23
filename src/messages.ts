@@ -23,8 +23,9 @@ const initMessages = () => {
     }
   )
 
-  app.message(/(LGTM|lgtm)/, async ({ say, context }) => {
-    if(context.botId) return
+  app.message(/(LGTM|lgtm)/, async ({ say, message }) => {
+    if(message.subtype && message.subtype === 'bot_message') return
+
     const lgtmImageURL = lgtmList[Math.floor(Math.random() * lgtmList.length)]
     await say(lgtmImageURL)
   })
