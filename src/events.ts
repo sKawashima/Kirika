@@ -1,7 +1,5 @@
 import app from './initBolt'
 import { mentionResponse } from './mentionResponse'
-import { fetchTextFromUrls } from './mentionResponse/fetchText'
-import { generateSummaryMessage } from './mentionResponse/generateMessage'
 
 const initEvents = () => {
   app.event('channel_created', async ({ event, context }) => {
