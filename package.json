@@ -23,7 +23,7 @@
   "homepage": "https://github.com/sKawashima/Kirika#readme",
   "dependencies": {
     "@octokit/rest": "^20.1.0",
-    "@slack/bolt": "^3.18.0",
+    "@slack/bolt": "^4.2.1",
     "@types/node": "^22.0.0",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
