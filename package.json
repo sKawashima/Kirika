@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/jsdom": "^21.1.6",
     "@types/turndown": "^5.0.4",
-    "lint-staged": "^15.2.2"
+    "lint-staged": "^16.0.0"
   },
   "lint-staged": {
     "**/*": []
