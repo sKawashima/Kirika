@@ -2,7 +2,7 @@ const getDataFromGitHub = async (path: string, octokit) => {
   const buffer = await octokit.repos.getContent({
     owner: 'skryu-studio',
     repo: 'equalizer',
-    ref: 'heads/master',
+    ref: 'master',
     path: path
   })
 
