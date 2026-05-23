@@ -15,12 +15,6 @@ const ANTHROPIC_MODEL = 'claude-sonnet-4-6'
 const ANTHROPIC_MAX_TOKENS = 64000 // Sonnet 4.6 同期 Messages API の出力上限
 const OPENAI_MODEL = 'gpt-4o'
 
-const extractText = (res: Anthropic.Message): string =>
-  res.content
-    .filter((b): b is Anthropic.TextBlock => b.type === 'text')
-    .map(b => b.text)
-    .join('')
-
 // Anthropic 側のサーバーエラー（5xx / 接続・タイムアウト）のときだけ true。
 // 4xx・認証・レート制限などリクエスト起因のエラーではフォールバックしない。
 const isAnthropicServerError = (error: unknown): boolean => {
@@ -76,8 +70,8 @@ const generate = async (
       messages: [{ role: 'user', content: text }],
       temperature: 0
     })
-    const res = await stream.finalMessage()
-    return extractText(res)
+    // 複数 text block も SDK と同じ join(' ') で連結する標準ヘルパーを使う
+    return await stream.finalText()
   } catch (error) {
     if (!isAnthropicServerError(error)) {
       return `エラーが発生しました。: ${error}`
