@@ -1,10 +1,35 @@
+import Anthropic from '@anthropic-ai/sdk'
 import { OpenAI } from 'openai'
 import dotenv from 'dotenv'
 dotenv.config()
 
+const anthropic = new Anthropic({
+  apiKey: process.env['ANTHROPIC_API_KEY']
+})
+
 const openai = new OpenAI({
   apiKey: process.env['OPENAI_API_KEY']
 })
+
+const ANTHROPIC_MODEL = 'claude-sonnet-4-6'
+const ANTHROPIC_MAX_TOKENS = 64000 // Sonnet 4.6 同期 Messages API の出力上限
+const OPENAI_MODEL = 'gpt-4o'
+
+const extractText = (res: Anthropic.Message): string =>
+  res.content
+    .filter((b): b is Anthropic.TextBlock => b.type === 'text')
+    .map(b => b.text)
+    .join('')
+
+// Anthropic 側のサーバーエラー（5xx / 接続・タイムアウト）のときだけ true。
+// 4xx・認証・レート制限などリクエスト起因のエラーではフォールバックしない。
+const isAnthropicServerError = (error: unknown): boolean => {
+  if (error instanceof Anthropic.APIConnectionError) return true
+  if (error instanceof Anthropic.APIError && typeof error.status === 'number') {
+    return error.status >= 500
+  }
+  return false
+}
 
 const SYSTEM_PROMPT = `
 You are an assistant that takes markdown text, summarizes the content, and answers questions about that content.
@@ -27,23 +52,6 @@ Answer in Japanese unless otherwise instructed by the user.
 Please use the ですます調 in Japanese.
 `
 
-export const generateSummaryMessage = async (text: string) => {
-  try {
-    const res = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: text }
-      ],
-      temperature: 0
-    })
-
-    return res.choices[0].message.content
-  } catch (error) {
-    return `エラーが発生しました。: ${error}`
-  }
-}
-
 const GENERAL_SYSTEM_PROMPT = `
 You are an excellent assistant.
 
@@ -53,19 +61,46 @@ When answering in Japanese, please use "アタシ" in the first person.
 You will answer in Japanese unless otherwise instructed by the user.
 `
 
-export const generateMessage = async (text: string) => {
+// Anthropic を主に応答を生成し、Anthropic 側のサーバーエラー時のみ OpenAI にフォールバックする。
+const generate = async (
+  systemPrompt: string,
+  text: string
+): Promise<string> => {
   try {
-    const res = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: GENERAL_SYSTEM_PROMPT },
-        { role: 'user', content: text }
-      ],
+    // max_tokens が大きい（=API上限）と SDK は非ストリーミングを拒否するため
+    // ストリーミングで実行し、完了したメッセージ全体を受け取る（応答が短ければ即返る）。
+    const stream = anthropic.messages.stream({
+      model: ANTHROPIC_MODEL,
+      max_tokens: ANTHROPIC_MAX_TOKENS,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: text }],
       temperature: 0
     })
-
-    return res.choices[0].message.content
+    const res = await stream.finalMessage()
+    return extractText(res)
   } catch (error) {
-    return `エラーが発生しました。: ${error}`
+    if (!isAnthropicServerError(error)) {
+      return `エラーが発生しました。: ${error}`
+    }
+    // Anthropic がサーバーエラー → OpenAI にフォールバック
+    try {
+      const res = await openai.chat.completions.create({
+        model: OPENAI_MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: text }
+        ],
+        temperature: 0
+      })
+      return res.choices[0].message.content ?? ''
+    } catch (fallbackError) {
+      return `エラーが発生しました。: ${fallbackError}`
+    }
   }
 }
+
+export const generateSummaryMessage = (text: string) =>
+  generate(SYSTEM_PROMPT, text)
+
+export const generateMessage = (text: string) =>
+  generate(GENERAL_SYSTEM_PROMPT, text)
