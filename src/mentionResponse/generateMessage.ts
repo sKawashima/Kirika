@@ -15,6 +15,14 @@ const ANTHROPIC_MODEL = 'claude-sonnet-4-6'
 const ANTHROPIC_MAX_TOKENS = 64000 // Sonnet 4.6 同期 Messages API の出力上限
 const OPENAI_MODEL = 'gpt-4o'
 
+// サーバーサイド Web 検索ツール。検索は Anthropic 側で実行され、Claude が
+// 必要と判断したときだけ自動で使う（こちらで検索 API を実装する必要はない）。
+const WEB_SEARCH_TOOL: Anthropic.Messages.WebSearchTool20250305 = {
+  type: 'web_search_20250305',
+  name: 'web_search',
+  max_uses: 5 // 1 リクエストあたりの検索回数上限（コスト・レイテンシ抑制）
+}
+
 // Anthropic 側のサーバーエラー（5xx / 接続・タイムアウト）のときだけ true。
 // 4xx・認証・レート制限などリクエスト起因のエラーではフォールバックしない。
 const isAnthropicServerError = (error: unknown): boolean => {
@@ -35,10 +43,14 @@ You are an assistant that takes markdown text, summarizes the content, and answe
 *内容*
 <detailed summary (as much detail as possible)>
 
-## If the user asks a question, please answer it based on ArticleContents.
+## If the user asks a question, first try to answer it based on ArticleContents.
 The format is free.
 
-## If there is a question that is not in the article, please answer, "There is no information in the article," and provide no further information.
+## Only if the user's additional question cannot be answered from ArticleContents and requires looking up other documents or up-to-date external information, you may use the web_search tool to research it.
+Do not use web_search just to summarize the article, nor for questions that can already be answered from ArticleContents.
+The format is free.
+
+## If the answer still cannot be found even after that, please answer, "There is no information in the article," and provide no further information.
 The format is free.
 
 ## Communication Guidelines
@@ -55,6 +67,32 @@ When answering in Japanese, please use "アタシ" in the first person.
 You will answer in Japanese unless otherwise instructed by the user.
 `
 
+// 最終メッセージから本文を組み立て、Web 検索が使われた場合は出典 URL を末尾に付ける。
+// finalText() は citation を捨てるため、content ブロックを直接走査する。
+const formatMessage = (message: Anthropic.Messages.Message): string => {
+  const textParts: string[] = []
+  const sources = new Map<string, string>() // url -> title（重複排除）
+  for (const block of message.content) {
+    if (block.type !== 'text') continue
+    textParts.push(block.text)
+    for (const citation of block.citations ?? []) {
+      if (citation.type === 'web_search_result_location') {
+        sources.set(citation.url, citation.title ?? citation.url)
+      }
+    }
+  }
+  // finalText() と同じく text block を join(' ') で連結する
+  let result = textParts.join(' ').trim()
+  if (sources.size > 0) {
+    const lines = Array.from(
+      sources,
+      ([url, title]) => `• <${url}|${title}>`
+    )
+    result += `\n\n*出典*\n${lines.join('\n')}`
+  }
+  return result
+}
+
 // Anthropic を主に応答を生成し、Anthropic 側のサーバーエラー時のみ OpenAI にフォールバックする。
 const generate = async (
   systemPrompt: string,
@@ -63,15 +101,17 @@ const generate = async (
   try {
     // max_tokens が大きい（=API上限）と SDK は非ストリーミングを拒否するため
     // ストリーミングで実行し、完了したメッセージ全体を受け取る（応答が短ければ即返る）。
+    // tools に Web 検索を渡すと、Claude が必要と判断したときだけ自動で検索する。
     const stream = anthropic.messages.stream({
       model: ANTHROPIC_MODEL,
       max_tokens: ANTHROPIC_MAX_TOKENS,
       system: systemPrompt,
       messages: [{ role: 'user', content: text }],
+      tools: [WEB_SEARCH_TOOL],
       temperature: 0
     })
-    // 複数 text block も SDK と同じ join(' ') で連結する標準ヘルパーを使う
-    return await stream.finalText()
+    // 本文を組み立て、検索が使われていれば出典 URL も付加する
+    return formatMessage(await stream.finalMessage())
   } catch (error) {
     if (!isAnthropicServerError(error)) {
       return `エラーが発生しました。: ${error}`
