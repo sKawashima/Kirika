@@ -23,6 +23,9 @@ const WEB_SEARCH_TOOL: Anthropic.Messages.WebSearchTool20250305 = {
   max_uses: 5 // 1 リクエストあたりの検索回数上限（コスト・レイテンシ抑制）
 }
 
+// pause_turn による継続リクエストの上限（初回 + 継続を含む。無限ループ防止）
+const MAX_TURNS = 5
+
 // Anthropic 側のサーバーエラー（5xx / 接続・タイムアウト）のときだけ true。
 // 4xx・認証・レート制限などリクエスト起因のエラーではフォールバックしない。
 const isAnthropicServerError = (error: unknown): boolean => {
@@ -62,16 +65,20 @@ const GENERAL_SYSTEM_PROMPT = `
 You are an excellent assistant.
 
 Please limit your response to 5 sentences or less, unless the user instructs you to "elaborate" or otherwise.
+Use the web_search tool only when answering requires up-to-date information or external facts you are not confident about; otherwise answer directly without searching.
 Please use the ですます調 in Japanese.
 When answering in Japanese, please use "アタシ" in the first person.
 You will answer in Japanese unless otherwise instructed by the user.
 `
 
-// 最終メッセージから本文を組み立て、Web 検索が使われた場合は出典 URL を末尾に付ける。
+// メッセージの content ブロックから本文テキストと出典を取り出し、集約先に追記する。
 // finalText() は citation を捨てるため、content ブロックを直接走査する。
-const formatMessage = (message: Anthropic.Messages.Message): string => {
-  const textParts: string[] = []
-  const sources = new Map<string, string>() // url -> title（重複排除）
+// pause_turn による複数ターンに跨る応答もここで蓄積できる。
+const collectContent = (
+  message: Anthropic.Messages.Message,
+  textParts: string[],
+  sources: Map<string, string> // url -> title（重複排除）
+): void => {
   for (const block of message.content) {
     if (block.type !== 'text') continue
     textParts.push(block.text)
@@ -81,6 +88,14 @@ const formatMessage = (message: Anthropic.Messages.Message): string => {
       }
     }
   }
+}
+
+// 蓄積した本文と出典から最終的な応答文字列を組み立てる。
+// 検索が使われた場合だけ末尾に出典 URL を付ける。
+const buildResult = (
+  textParts: string[],
+  sources: Map<string, string>
+): string => {
   // finalText() と同じく text block を join(' ') で連結する
   let result = textParts.join(' ').trim()
   if (sources.size > 0) {
@@ -99,19 +114,34 @@ const generate = async (
   text: string
 ): Promise<string> => {
   try {
-    // max_tokens が大きい（=API上限）と SDK は非ストリーミングを拒否するため
-    // ストリーミングで実行し、完了したメッセージ全体を受け取る（応答が短ければ即返る）。
-    // tools に Web 検索を渡すと、Claude が必要と判断したときだけ自動で検索する。
-    const stream = anthropic.messages.stream({
-      model: ANTHROPIC_MODEL,
-      max_tokens: ANTHROPIC_MAX_TOKENS,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: text }],
-      tools: [WEB_SEARCH_TOOL],
-      temperature: 0
-    })
+    const messages: Anthropic.Messages.MessageParam[] = [
+      { role: 'user', content: text }
+    ]
+    const textParts: string[] = []
+    const sources = new Map<string, string>()
+    // Web 検索などサーバーツール使用時、長いターンは stop_reason='pause_turn' で
+    // 中断されることがある。その場合はアシスタントの途中経過を積み増してターンを
+    // 継続する（無限ループ防止のため MAX_TURNS で上限を設ける）。
+    for (let turn = 0; turn < MAX_TURNS; turn++) {
+      // max_tokens が大きい（=API上限）と SDK は非ストリーミングを拒否するため
+      // ストリーミングで実行し、完了したメッセージ全体を受け取る（応答が短ければ即返る）。
+      // tools に Web 検索を渡すと、Claude が必要と判断したときだけ自動で検索する。
+      const stream = anthropic.messages.stream({
+        model: ANTHROPIC_MODEL,
+        max_tokens: ANTHROPIC_MAX_TOKENS,
+        system: systemPrompt,
+        messages,
+        tools: [WEB_SEARCH_TOOL],
+        temperature: 0
+      })
+      const message = await stream.finalMessage()
+      collectContent(message, textParts, sources)
+      // pause_turn 以外（end_turn 等）で完了。pause_turn のときだけ継続する。
+      if (message.stop_reason !== 'pause_turn') break
+      messages.push({ role: 'assistant', content: message.content })
+    }
     // 本文を組み立て、検索が使われていれば出典 URL も付加する
-    return formatMessage(await stream.finalMessage())
+    return buildResult(textParts, sources)
   } catch (error) {
     if (!isAnthropicServerError(error)) {
       return `エラーが発生しました。: ${error}`
