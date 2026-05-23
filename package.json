@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/sKawashima/Kirika#readme",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.98.0",
     "@octokit/rest": "^20.1.0",
     "@slack/bolt": "^3.18.0",
     "@types/node": "^25.5.0",
