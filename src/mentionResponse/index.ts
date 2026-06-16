@@ -22,15 +22,8 @@ export const mentionResponse = async ({
 
   if (urls.length > 0) {
     const fetchedMarkdowns = await fetchTextFromUrls(urls)
-    if (!fetchedMarkdowns) {
-      say({
-        text: 'エラー：URLのサーバーに弾かれたためページを取得できませんでした',
-        thread_ts
-      })
-      return
-    }
 
-    const message = await generateSummaryMessage(fetchedMarkdowns)
+    const message = await generateSummaryMessage(fetchedMarkdowns || urls.join('\n'))
 
     say({
       text: message,
@@ -84,17 +77,10 @@ export const mentionResponse = async ({
     }
 
     const fetchedMarkdowns = await fetchTextFromUrls(urlInReplies)
-    if (!fetchedMarkdowns) {
-      say({
-        text: 'エラー：URLのサーバーに弾かれたためページを取得できませんでした',
-        thread_ts
-      })
-      return
-    }
 
     const message = await generateSummaryMessage(`
 ArticleContents:
-${fetchedMarkdowns}
+${fetchedMarkdowns || urlInReplies.join('\n')}
 
 ---
 Past Conversations:
