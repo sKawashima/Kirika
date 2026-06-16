@@ -91,7 +91,12 @@ ${replies.messages
   .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
   .join('\n---\n') + '\n---\n' + `user: ${event.text}`}
 `)
-      : await generateSummaryMessageFromUrls(urlInReplies)
+      : await generateSummaryMessageFromUrls(
+          urlInReplies,
+          replies.messages
+            .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
+            .join('\n---\n') + '\n---\n' + `user: ${event.text}`
+        )
 
     say({
       text: message,

@@ -181,8 +181,15 @@ Please use the ですます調 in Japanese.
 export const generateSummaryMessage = (text: string) =>
   generate(SYSTEM_PROMPT, text)
 
-export const generateSummaryMessageFromUrls = (urls: string[]) =>
-  generate(URL_FALLBACK_SYSTEM_PROMPT, urls.join('\n'))
+export const generateSummaryMessageFromUrls = (
+  urls: string[],
+  conversationContext?: string
+) => {
+  const input = conversationContext
+    ? `URLs:\n${urls.join('\n')}\n\n---\nPast Conversations:\n${conversationContext}`
+    : urls.join('\n')
+  return generate(URL_FALLBACK_SYSTEM_PROMPT, input)
+}
 
 export const generateMessage = (text: string) =>
   generate(GENERAL_SYSTEM_PROMPT, text)
