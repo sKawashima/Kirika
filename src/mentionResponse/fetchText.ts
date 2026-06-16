@@ -63,6 +63,9 @@ const parseHTMLToMarkdown = (html: string) => {
 
 export const fetchTextFromUrls = async (urls: string[]) => {
   const fetchedTexts = await Promise.all(urls.map(fetchText))
-  const validTexts = fetchedTexts.filter((t): t is string => t !== null)
+  const validTexts = fetchedTexts
+    .filter((t): t is string => t !== null)
+    .map(t => t.trim())
+    .filter(t => t.length > 0)
   return validTexts.length > 0 ? validTexts.join('\n---\n') : null
 }
