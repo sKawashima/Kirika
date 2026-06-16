@@ -34,7 +34,9 @@ export const mentionResponse = async ({
 
     say({
       text: message,
-      thread_ts
+      thread_ts,
+      unfurl_links: false,
+      unfurl_media: false
     })
   } else {
     const replies = await client.conversations.replies({
@@ -74,7 +76,9 @@ export const mentionResponse = async ({
             : modifiedMessage.endsWith('。\n')
             ? modifiedMessage.slice(0, -2) + desuReplacement()
             : modifiedMessage + desuReplacement(),
-        thread_ts
+        thread_ts,
+        unfurl_links: false,
+        unfurl_media: false
       })
       return
     }
@@ -101,7 +105,9 @@ ${replies.messages
 
     say({
       text: message,
-      thread_ts
+      thread_ts,
+      unfurl_links: false,
+      unfurl_media: false
     })
   }
 }
