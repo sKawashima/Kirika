@@ -1,6 +1,6 @@
 import { AppMentionEvent, Context, SayFn } from '@slack/bolt'
 import { fetchTextFromUrls } from './fetchText'
-import { generateMessage, generateSummaryMessage } from './generateMessage'
+import { generateMessage, generateSummaryMessage, generateSummaryMessageFromUrls } from './generateMessage'
 import { getUrl } from './getUrl'
 import { StringIndexed } from '@slack/bolt/dist/types/helpers'
 import { WebClient } from '@slack/web-api'
@@ -22,19 +22,16 @@ export const mentionResponse = async ({
 
   if (urls.length > 0) {
     const fetchedMarkdowns = await fetchTextFromUrls(urls)
-    if (!fetchedMarkdowns) {
-      say({
-        text: 'エラー：URLのサーバーに弾かれたためページを取得できませんでした',
-        thread_ts
-      })
-      return
-    }
 
-    const message = await generateSummaryMessage(fetchedMarkdowns)
+    const message = fetchedMarkdowns
+      ? await generateSummaryMessage(fetchedMarkdowns)
+      : await generateSummaryMessageFromUrls(urls)
 
     say({
       text: message,
-      thread_ts
+      thread_ts,
+      unfurl_links: false,
+      unfurl_media: false
     })
   } else {
     const replies = await client.conversations.replies({
@@ -74,21 +71,17 @@ export const mentionResponse = async ({
             : modifiedMessage.endsWith('。\n')
             ? modifiedMessage.slice(0, -2) + desuReplacement()
             : modifiedMessage + desuReplacement(),
-        thread_ts
+        thread_ts,
+        unfurl_links: false,
+        unfurl_media: false
       })
       return
     }
 
     const fetchedMarkdowns = await fetchTextFromUrls(urlInReplies)
-    if (!fetchedMarkdowns) {
-      say({
-        text: 'エラー：URLのサーバーに弾かれたためページを取得できませんでした',
-        thread_ts
-      })
-      return
-    }
 
-    const message = await generateSummaryMessage(`
+    const message = fetchedMarkdowns
+      ? await generateSummaryMessage(`
 ArticleContents:
 ${fetchedMarkdowns}
 
@@ -98,10 +91,18 @@ ${replies.messages
   .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
   .join('\n---\n') + '\n---\n' + `user: ${event.text}`}
 `)
+      : await generateSummaryMessageFromUrls(
+          urlInReplies,
+          replies.messages
+            .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
+            .join('\n---\n') + '\n---\n' + `user: ${event.text}`
+        )
 
     say({
       text: message,
-      thread_ts
+      thread_ts,
+      unfurl_links: false,
+      unfurl_media: false
     })
   }
 }
