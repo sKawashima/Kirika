@@ -163,8 +163,26 @@ const generate = async (
   }
 }
 
+const URL_FALLBACK_SYSTEM_PROMPT = `
+You are an assistant that summarizes web pages.
+The user will provide URLs that could not be fetched directly.
+Please use the web_search tool to look up the content of each URL and provide a summary:
+
+*3行まとめ*
+<short and simple three-sentence summary (break line after each sentence)>
+
+*内容*
+<detailed summary (as much detail as possible)>
+
+Answer in Japanese unless otherwise instructed by the user.
+Please use the ですます調 in Japanese.
+`
+
 export const generateSummaryMessage = (text: string) =>
   generate(SYSTEM_PROMPT, text)
+
+export const generateSummaryMessageFromUrls = (urls: string[]) =>
+  generate(URL_FALLBACK_SYSTEM_PROMPT, urls.join('\n'))
 
 export const generateMessage = (text: string) =>
   generate(GENERAL_SYSTEM_PROMPT, text)

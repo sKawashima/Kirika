@@ -1,6 +1,6 @@
 import { AppMentionEvent, Context, SayFn } from '@slack/bolt'
 import { fetchTextFromUrls } from './fetchText'
-import { generateMessage, generateSummaryMessage } from './generateMessage'
+import { generateMessage, generateSummaryMessage, generateSummaryMessageFromUrls } from './generateMessage'
 import { getUrl } from './getUrl'
 import { StringIndexed } from '@slack/bolt/dist/types/helpers'
 import { WebClient } from '@slack/web-api'
@@ -23,7 +23,9 @@ export const mentionResponse = async ({
   if (urls.length > 0) {
     const fetchedMarkdowns = await fetchTextFromUrls(urls)
 
-    const message = await generateSummaryMessage(fetchedMarkdowns || urls.join('\n'))
+    const message = fetchedMarkdowns
+      ? await generateSummaryMessage(fetchedMarkdowns)
+      : await generateSummaryMessageFromUrls(urls)
 
     say({
       text: message,
@@ -78,9 +80,10 @@ export const mentionResponse = async ({
 
     const fetchedMarkdowns = await fetchTextFromUrls(urlInReplies)
 
-    const message = await generateSummaryMessage(`
+    const message = fetchedMarkdowns
+      ? await generateSummaryMessage(`
 ArticleContents:
-${fetchedMarkdowns || urlInReplies.join('\n')}
+${fetchedMarkdowns}
 
 ---
 Past Conversations:
@@ -88,6 +91,7 @@ ${replies.messages
   .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
   .join('\n---\n') + '\n---\n' + `user: ${event.text}`}
 `)
+      : await generateSummaryMessageFromUrls(urlInReplies)
 
     say({
       text: message,
