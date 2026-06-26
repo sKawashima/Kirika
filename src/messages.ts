@@ -85,7 +85,7 @@ const initMessages = () => {
   })
 
   app.message(/slot/, async ({ say, message }) => {
-    const thread_ts = message.ts
+    const thread_ts = message.thread_ts || message.ts
     const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
     const rolls: number[][] = []
