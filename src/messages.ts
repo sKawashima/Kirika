@@ -88,10 +88,13 @@ const initMessages = () => {
     // @ts-ignore
     const thread_ts = message.thread_ts || message.ts
     const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+    // @ts-ignore
+    const countMatch = (message.text as string || '').match(/slot\s+(\d+)/)
+    const count = countMatch ? Math.max(1, Math.min(parseInt(countMatch[1], 10), 1000)) : 10
 
     const rolls: number[][] = []
     let hasJackpot = false
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < count; i++) {
       const roll = Array.from({ length: 3 }, () => Math.floor(Math.random() * 7) + 1)
       rolls.push(roll)
       if (roll[0] === roll[1] && roll[1] === roll[2]) {
