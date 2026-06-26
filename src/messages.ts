@@ -111,8 +111,8 @@ const initMessages = () => {
     }
 
     for (const { nums, jackpot } of rounds) {
-      if (desuflash && !jackpot) {
-        while (Math.random() < 0.5) await desuPost()
+      if (desuflash && jackpot && Math.random() < 0.5) {
+        await desuPost()
       }
 
       if (jackpot) {
