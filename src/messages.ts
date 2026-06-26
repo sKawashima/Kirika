@@ -104,7 +104,7 @@ const initMessages = () => {
 
     let isFirst = true
     const post = async (text: string) => {
-      if (!isFirst) await sleep(1000)
+      if (!isFirst) await sleep(500)
       isFirst = false
       await say({ text, thread_ts })
     }
