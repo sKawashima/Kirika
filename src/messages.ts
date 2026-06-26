@@ -88,10 +88,13 @@ const initMessages = () => {
     // @ts-ignore
     const thread_ts = message.thread_ts || message.ts
     const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+    // @ts-ignore
+    const countMatch = (message.text as string || '').match(/slot\s+(\d+)/)
+    const count = countMatch ? Math.max(1, Math.min(parseInt(countMatch[1], 10), 1000)) : 10
 
     const rolls: number[][] = []
     let hasJackpot = false
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < count; i++) {
       const roll = Array.from({ length: 3 }, () => Math.floor(Math.random() * 7) + 1)
       rolls.push(roll)
       if (roll[0] === roll[1] && roll[1] === roll[2]) {
@@ -104,12 +107,13 @@ const initMessages = () => {
 
     let isFirst = true
     const post = async (text: string) => {
-      if (!isFirst) await sleep(1000)
+      if (!isFirst) await sleep(500)
       isFirst = false
       await say({ text, thread_ts })
     }
 
-    for (const roll of rolls) {
+    for (let i = 0; i < rolls.length; i++) {
+      const roll = rolls[i]
       const jackpot = roll[0] === roll[1] && roll[1] === roll[2]
       if (jackpot) {
         if (desuflash && Math.random() < 0.5) {
@@ -126,10 +130,9 @@ const initMessages = () => {
           await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
         }
       }
-      await post(roll.join(' '))
+      const isLast = i === rolls.length - 1
+      await post(isLast ? `${roll.join(' ')}\nハズレ:desu:⋯` : roll.join(' '))
     }
-
-    await post('ハズレ:desu:⋯')
   })
 }
 
