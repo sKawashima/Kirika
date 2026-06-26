@@ -85,6 +85,7 @@ const initMessages = () => {
   })
 
   app.message(/slot/, async ({ say, message }) => {
+    // @ts-ignore
     const thread_ts = message.thread_ts || message.ts
     const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
