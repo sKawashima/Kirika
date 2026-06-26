@@ -116,7 +116,7 @@ const initMessages = () => {
       const roll = rolls[i]
       const jackpot = roll[0] === roll[1] && roll[1] === roll[2]
       if (jackpot) {
-        if (desuflash && Math.random() < 0.5) {
+        while (desuflash && Math.random() < 0.5) {
           await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
         }
         const display = Math.random() < 1 / 400
