@@ -109,7 +109,8 @@ const initMessages = () => {
       await say({ text, thread_ts })
     }
 
-    for (const roll of rolls) {
+    for (let i = 0; i < rolls.length; i++) {
+      const roll = rolls[i]
       const jackpot = roll[0] === roll[1] && roll[1] === roll[2]
       if (jackpot) {
         if (desuflash && Math.random() < 0.5) {
@@ -126,10 +127,9 @@ const initMessages = () => {
           await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
         }
       }
-      await post(roll.join(' '))
+      const isLast = i === rolls.length - 1
+      await post(isLast ? `${roll.join(' ')}\nハズレ:desu:⋯` : roll.join(' '))
     }
-
-    await post('ハズレ:desu:⋯')
   })
 }
 
