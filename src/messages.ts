@@ -106,8 +106,8 @@ const initMessages = () => {
     const desuflash = hasJackpot && Math.random() < 1 / 10
 
     let isFirst = true
-    const post = async (text: string) => {
-      if (!isFirst) await sleep(500)
+    const post = async (text: string, ms = 500) => {
+      if (!isFirst) await sleep(ms)
       isFirst = false
       await say({ text, thread_ts })
     }
@@ -117,7 +117,7 @@ const initMessages = () => {
       const jackpot = roll[0] === roll[1] && roll[1] === roll[2]
       if (jackpot) {
         while (desuflash && Math.random() < 0.5) {
-          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250)
         }
         const display = Math.random() < 1 / 400
           ? (['HMP', 'なまこ'] as const)[Math.floor(Math.random() * 2)]
@@ -127,7 +127,7 @@ const initMessages = () => {
       }
       if (desuflash) {
         while (Math.random() < 0.5) {
-          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250)
         }
       }
       const isLast = i === rolls.length - 1
