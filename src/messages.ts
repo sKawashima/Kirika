@@ -88,42 +88,44 @@ const initMessages = () => {
     const thread_ts = message.ts
     const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-    const rounds: { nums: number[]; jackpot: boolean }[] = []
+    const rolls: number[][] = []
+    let hasJackpot = false
     for (let i = 0; i < 10; i++) {
-      const nums = [0, 1, 2].map(() => Math.floor(Math.random() * 7) + 1)
-      const jackpot = nums[0] === nums[1] && nums[1] === nums[2]
-      rounds.push({ nums, jackpot })
-      if (jackpot) break
+      const roll = Array.from({ length: 3 }, () => Math.floor(Math.random() * 7) + 1)
+      rolls.push(roll)
+      if (roll[0] === roll[1] && roll[1] === roll[2]) {
+        hasJackpot = true
+        break
+      }
     }
 
-    const hasJackpot = rounds[rounds.length - 1].jackpot
     const desuflash = hasJackpot && Math.random() < 1 / 10
 
-    let first = true
+    let isFirst = true
     const post = async (text: string) => {
-      if (!first) await sleep(1000)
-      first = false
+      if (!isFirst) await sleep(1000)
+      isFirst = false
       await say({ text, thread_ts })
     }
 
-    const desuPost = async () => {
-      await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
-    }
-
-    for (const { nums, jackpot } of rounds) {
-      if (desuflash && jackpot && Math.random() < 0.5) {
-        await desuPost()
-      }
-
+    for (const roll of rolls) {
+      const jackpot = roll[0] === roll[1] && roll[1] === roll[2]
       if (jackpot) {
+        if (desuflash && Math.random() < 0.5) {
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
+        }
         const display = Math.random() < 1 / 400
-          ? ['HMP', 'なまこ'][Math.floor(Math.random() * 2)]
-          : nums.join(' ')
+          ? (['HMP', 'なまこ'] as const)[Math.floor(Math.random() * 2)]
+          : roll.join(' ')
         await post(`${display}\n大当たり:de-su:`)
         return
       }
-
-      await post(nums.join(' '))
+      if (desuflash) {
+        while (Math.random() < 0.5) {
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
+        }
+      }
+      await post(roll.join(' '))
     }
 
     await post('ハズレ:desu:⋯')
