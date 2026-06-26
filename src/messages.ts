@@ -83,6 +83,54 @@ const initMessages = () => {
     const result = await diceroll(message.text)
     await say(result)
   })
+
+  app.message(/slot/, async ({ say, message }) => {
+    // @ts-ignore
+    const thread_ts = message.thread_ts || message.ts
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+    const rolls: number[][] = []
+    let hasJackpot = false
+    for (let i = 0; i < 10; i++) {
+      const roll = Array.from({ length: 3 }, () => Math.floor(Math.random() * 7) + 1)
+      rolls.push(roll)
+      if (roll[0] === roll[1] && roll[1] === roll[2]) {
+        hasJackpot = true
+        break
+      }
+    }
+
+    const desuflash = hasJackpot && Math.random() < 1 / 10
+
+    let isFirst = true
+    const post = async (text: string) => {
+      if (!isFirst) await sleep(1000)
+      isFirst = false
+      await say({ text, thread_ts })
+    }
+
+    for (const roll of rolls) {
+      const jackpot = roll[0] === roll[1] && roll[1] === roll[2]
+      if (jackpot) {
+        if (desuflash && Math.random() < 0.5) {
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
+        }
+        const display = Math.random() < 1 / 400
+          ? (['HMP', 'なまこ'] as const)[Math.floor(Math.random() * 2)]
+          : roll.join(' ')
+        await post(`${display}\n大当たり:de-su:`)
+        return
+      }
+      if (desuflash) {
+        while (Math.random() < 0.5) {
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:')
+        }
+      }
+      await post(roll.join(' '))
+    }
+
+    await post('ハズレ:desu:⋯')
+  })
 }
 
 export default initMessages
