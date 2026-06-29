@@ -133,11 +133,19 @@ const initMessages = () => {
             true,
           )
         }
-        const display =
-          Math.random() < 1 / 400
-            ? (['HMP', 'なまこ'] as const)[Math.floor(Math.random() * 2)]
-            : roll.join(' ')
-        await post(`${display}\n大当たり:de-su:`, 500, true)
+        if (desuflash) {
+          await post(
+            '❗❗❗ :dededede-su: :dededede-su: :dededede-su: ❗❗❗',
+            500,
+            true,
+          )
+        } else {
+          const display =
+            Math.random() < 1 / 400
+              ? (['HMP', 'なまこ'] as const)[Math.floor(Math.random() * 2)]
+              : roll.join(' ')
+          await post(`${display}\n大当たり:de-su:`, 500, true)
+        }
         return
       }
       if (desuflash) {
