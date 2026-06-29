@@ -27,7 +27,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.98.0",
     "@octokit/rest": "^20.1.0",
-    "@slack/bolt": "^3.18.0",
+    "@slack/bolt": "^4.7.3",
     "@types/node": "^25.5.0",
     "axios": "^1.6.8",
     "dotenv": "^17.0.0",
