@@ -2,8 +2,9 @@ import app from './initBolt'
 
 export const getChannelsList = async ({ token }) => {
   try {
+    // biome-ignore lint/suspicious/noExplicitAny: 既存コードの型定義
     const getChannelsListResponce: any = await app.client.conversations.list({
-      token: token
+      token: token,
     })
 
     getChannelsListResponce.channels.sort((a, b) => {
@@ -13,7 +14,7 @@ export const getChannelsList = async ({ token }) => {
     })
 
     let channelsListText = ''
-    getChannelsListResponce.channels.forEach(channel => {
+    getChannelsListResponce.channels.forEach((channel) => {
       if (!channel.is_archived)
         channelsListText += `<#${channel.id}|${channel.name}> ${
           channel.purpose.value
@@ -29,11 +30,11 @@ export const getChannelsList = async ({ token }) => {
 export const diceroll = async (command: string) => {
   const numbers = command.match(/(\d+)d(\d+)/)
   const diceResult = [...Array(Number(numbers[1]))].map(() =>
-    Math.floor(Math.random() * Number(numbers[2]) + 1)
+    Math.floor(Math.random() * Number(numbers[2]) + 1),
   )
   const message = `${numbers[0]}:de-su:
 
-${diceResult.map(number => `${number}`).reduce((pre, crr) => `${pre}\n${crr}`)}
+${diceResult.map((number) => `${number}`).reduce((pre, crr) => `${pre}\n${crr}`)}
 合計: ${diceResult.reduce((pre, cur) => pre + cur)}
   `
   return message

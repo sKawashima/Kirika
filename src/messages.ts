@@ -1,7 +1,7 @@
-import app from './initBolt'
-import { lgtmList } from './imageList'
-import { getRandomKantoStation } from './randomStation'
 import { diceroll } from './functions'
+import { lgtmList } from './imageList'
+import app from './initBolt'
+import { getRandomKantoStation } from './randomStation'
 
 const initMessages = () => {
   app.message(
@@ -17,14 +17,14 @@ const initMessages = () => {
         ':desu::desu::de-su:',
         ':dededede-su:',
         'https://lohas.nicoseiga.jp/thumb/5661682i',
-        'https://pbs.twimg.com/media/Dal0dcJV4AEaY0p.jpg'
+        'https://pbs.twimg.com/media/Dal0dcJV4AEaY0p.jpg',
       ]
       await say(messages[Math.floor(Math.random() * messages.length)])
-    }
+    },
   )
 
   app.message(/(LGTM|lgtm)/, async ({ say, message }) => {
-    if(message.subtype && (message.subtype === 'bot_message' || 'slackbot_response')) return
+    if (message.subtype && message.subtype === 'bot_message') return
 
     const lgtmImageURL = lgtmList[Math.floor(Math.random() * lgtmList.length)]
     await say(lgtmImageURL)
@@ -36,7 +36,7 @@ const initMessages = () => {
       'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
       'おつかれさま:desu::+1:',
-      'おつかれさま:de-su::clap::tada:'
+      'おつかれさま:de-su::clap::tada:',
     ]
     await say(messages[Math.floor(Math.random() * messages.length)])
   })
@@ -47,7 +47,7 @@ const initMessages = () => {
         token: context.botToken,
         name: 'tema',
         channel: message.channel,
-        timestamp: message.ts
+        timestamp: message.ts,
       })
     } catch (err) {
       console.log(err)
@@ -60,7 +60,7 @@ const initMessages = () => {
         token: context.botToken,
         name: 'nidodema',
         channel: message.channel,
-        timestamp: message.ts
+        timestamp: message.ts,
       })
     } catch (err) {
       console.log(err)
@@ -74,28 +74,34 @@ const initMessages = () => {
   app.message(/(関東駅ガチャ|kantoekigacha)/, async ({ say }) => {
     const randomKantoStation = await getRandomKantoStation()
     await say(
-      `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`
+      `${randomKantoStation}:de-su:\nhttps://www.google.co.jp/maps/search/${randomKantoStation}駅`,
     )
   })
 
   app.message(/^\d+d\d+/, async ({ say, message }) => {
-    // @ts-ignore
+    // @ts-expect-error
     const result = await diceroll(message.text)
     await say(result)
   })
 
   app.message(/slot/, async ({ say, message }) => {
-    // @ts-ignore
+    // @ts-expect-error
     const thread_ts = message.thread_ts || message.ts
-    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-    // @ts-ignore
-    const countMatch = (message.text as string || '').match(/slot\s+(\d+)/)
-    const count = countMatch ? Math.max(1, Math.min(parseInt(countMatch[1], 10), 1000)) : 10
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms))
+    // @ts-expect-error
+    const countMatch = ((message.text as string) || '').match(/slot\s+(\d+)/)
+    const count = countMatch
+      ? Math.max(1, Math.min(parseInt(countMatch[1], 10), 1000))
+      : 10
 
     const rolls: number[][] = []
     let hasJackpot = false
     for (let i = 0; i < count; i++) {
-      const roll = Array.from({ length: 3 }, () => Math.floor(Math.random() * 7) + 1)
+      const roll = Array.from(
+        { length: 3 },
+        () => Math.floor(Math.random() * 7) + 1,
+      )
       rolls.push(roll)
       if (roll[0] === roll[1] && roll[1] === roll[2]) {
         hasJackpot = true
@@ -106,10 +112,10 @@ const initMessages = () => {
     const desuflash = hasJackpot && Math.random() < 1 / 10
 
     let isFirst = true
-    const post = async (text: string, ms = 500, broadcast = false) => {
+    const post = async (text: string, ms = 500) => {
       if (!isFirst) await sleep(ms)
       isFirst = false
-      await say({ text, thread_ts, ...(broadcast ? { reply_broadcast: true } : {}) })
+      await say({ text, thread_ts })
     }
 
     for (let i = 0; i < rolls.length; i++) {
@@ -117,21 +123,22 @@ const initMessages = () => {
       const jackpot = roll[0] === roll[1] && roll[1] === roll[2]
       if (jackpot) {
         while (desuflash && Math.random() < 0.5) {
-          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250, true)
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250)
         }
-        const display = Math.random() < 1 / 400
-          ? (['HMP', 'なまこ'] as const)[Math.floor(Math.random() * 2)]
-          : roll.join(' ')
-        await post(`${display}\n大当たり:de-su:`, 500, true)
+        const display =
+          Math.random() < 1 / 400
+            ? (['HMP', 'なまこ'] as const)[Math.floor(Math.random() * 2)]
+            : roll.join(' ')
+        await post(`${display}\n大当たり:de-su:`)
         return
       }
       if (desuflash) {
         while (Math.random() < 0.5) {
-          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250, true)
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250)
         }
       }
       const isLast = i === rolls.length - 1
-      await post(isLast ? `${roll.join(' ')}\nハズレ:desu:⋯` : roll.join(' '), 500, isLast)
+      await post(isLast ? `${roll.join(' ')}\nハズレ:desu:⋯` : roll.join(' '))
     }
   })
 }

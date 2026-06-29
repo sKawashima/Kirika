@@ -1,14 +1,15 @@
 import Anthropic from '@anthropic-ai/sdk'
-import { OpenAI } from 'openai'
 import dotenv from 'dotenv'
+import { OpenAI } from 'openai'
+
 dotenv.config()
 
 const anthropic = new Anthropic({
-  apiKey: process.env['ANTHROPIC_API_KEY']
+  apiKey: process.env.ANTHROPIC_API_KEY,
 })
 
 const openai = new OpenAI({
-  apiKey: process.env['OPENAI_API_KEY']
+  apiKey: process.env.OPENAI_API_KEY,
 })
 
 const ANTHROPIC_MODEL = 'claude-sonnet-4-6'
@@ -20,7 +21,7 @@ const OPENAI_MODEL = 'gpt-4o'
 const WEB_SEARCH_TOOL: Anthropic.Messages.WebSearchTool20250305 = {
   type: 'web_search_20250305',
   name: 'web_search',
-  max_uses: 5 // 1 リクエストあたりの検索回数上限（コスト・レイテンシ抑制）
+  max_uses: 5, // 1 リクエストあたりの検索回数上限（コスト・レイテンシ抑制）
 }
 
 // pause_turn による継続リクエストの上限（初回 + 継続を含む。無限ループ防止）
@@ -77,7 +78,7 @@ You will answer in Japanese unless otherwise instructed by the user.
 const collectContent = (
   message: Anthropic.Messages.Message,
   textParts: string[],
-  sources: Map<string, string> // url -> title（重複排除）
+  sources: Map<string, string>, // url -> title（重複排除）
 ): void => {
   for (const block of message.content) {
     if (block.type !== 'text') continue
@@ -94,15 +95,12 @@ const collectContent = (
 // 検索が使われた場合だけ末尾に出典 URL を付ける。
 const buildResult = (
   textParts: string[],
-  sources: Map<string, string>
+  sources: Map<string, string>,
 ): string => {
   // finalText() と同じく text block を join(' ') で連結する
   let result = textParts.join(' ').trim()
   if (sources.size > 0) {
-    const lines = Array.from(
-      sources,
-      ([url, title]) => `• <${url}|${title}>`
-    )
+    const lines = Array.from(sources, ([url, title]) => `• <${url}|${title}>`)
     result += `\n\n*出典*\n${lines.join('\n')}`
   }
   return result
@@ -111,11 +109,11 @@ const buildResult = (
 // Anthropic を主に応答を生成し、Anthropic 側のサーバーエラー時のみ OpenAI にフォールバックする。
 const generate = async (
   systemPrompt: string,
-  text: string
+  text: string,
 ): Promise<string> => {
   try {
     const messages: Anthropic.Messages.MessageParam[] = [
-      { role: 'user', content: text }
+      { role: 'user', content: text },
     ]
     const textParts: string[] = []
     const sources = new Map<string, string>()
@@ -132,7 +130,7 @@ const generate = async (
         system: systemPrompt,
         messages,
         tools: [WEB_SEARCH_TOOL],
-        temperature: 0
+        temperature: 0,
       })
       const message = await stream.finalMessage()
       collectContent(message, textParts, sources)
@@ -152,9 +150,9 @@ const generate = async (
         model: OPENAI_MODEL,
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: text }
+          { role: 'user', content: text },
         ],
-        temperature: 0
+        temperature: 0,
       })
       return res.choices[0].message.content ?? ''
     } catch (fallbackError) {
@@ -183,7 +181,7 @@ export const generateSummaryMessage = (text: string) =>
 
 export const generateSummaryMessageFromUrls = (
   urls: string[],
-  conversationContext?: string
+  conversationContext?: string,
 ) => {
   const input = conversationContext
     ? `URLs:\n${urls.join('\n')}\n\n---\nPast Conversations:\n${conversationContext}`

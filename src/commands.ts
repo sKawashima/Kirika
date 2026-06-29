@@ -1,13 +1,13 @@
-import app from './initBolt'
-import { getChannelsList } from './functions'
 import equalizer, { preEqualizer } from './equalizer'
+import { getChannelsList } from './functions'
+import app from './initBolt'
 
 const initCommands = () => {
   app.command('/kirika-say', async ({ ack, command, say, context }) => {
     await ack()
     await app.client.conversations.join({
       token: context.botToken,
-      channel: command.channel_id
+      channel: command.channel_id,
     })
     await say(`${command.text}:de-su:`)
   })
@@ -18,13 +18,13 @@ const initCommands = () => {
       await ack()
       await app.client.conversations.join({
         token: context.botToken,
-        channel: command.channel_id
+        channel: command.channel_id,
       })
       const channelsListText = await getChannelsList({
-        token: context.botToken
+        token: context.botToken,
       })
       await say(channelsListText)
-    }
+    },
   )
 
   app.command('/kirika-mahjong', async ({ ack, command, context }) => {
@@ -39,17 +39,17 @@ const initCommands = () => {
         token: context.botToken,
         channel: '帝国麻雀部',
         text: notificationMessage,
-        link_names: true
+        link_names: true,
       })
 
       const urlMessage = `:one: https://tenhou.net/0/?L4545\n:two: https://tenhou.net/0/?L1919\n:three: https://tenhou.net/0/?L${`0000${Math.round(
-        Math.random() * 10000
+        Math.random() * 10000,
       )}`.slice(-4)}`
       await app.client.chat.postMessage({
         token: context.botToken,
         channel: '帝国麻雀部',
         text: urlMessage,
-        link_names: true
+        link_names: true,
       })
     } catch (err) {
       console.log(err)

@@ -8,7 +8,7 @@ const initEvents = () => {
         token: context.botToken,
         channel: 'general',
         text: `新しいチャンネル :de-su: :eyes:\n#${event.channel.name}`,
-        link_names: true
+        link_names: true,
       })
     } catch (err) {
       console.log(err)

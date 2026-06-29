@@ -2179,5 +2179,5 @@ export const kantoStations = [
   '河津',
   '稲梓',
   '蓮台寺',
-  '伊豆急下田'
+  '伊豆急下田',
 ]

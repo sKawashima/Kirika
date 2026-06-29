@@ -1,24 +1,23 @@
 import { Octokit } from '@octokit/rest'
 import * as dotenv from 'dotenv'
-
-import getDataFromGitHub from './getDataFromGitHub'
 import formatSpritingBillsData from './formatSpritingBillsData'
+import getDataFromGitHub from './getDataFromGitHub'
 
 const setupData = async (yearMonth: string) => {
   dotenv.config()
 
   const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN
+    auth: process.env.GITHUB_TOKEN,
   })
 
   const sKFixedStringData = await getDataFromGitHub(
     `${yearMonth}/sK_fixed.txt`,
-    octokit
+    octokit,
   )
   const sKStringData = await getDataFromGitHub(`${yearMonth}/sK.txt`, octokit)
   const ryuStringData = await getDataFromGitHub(
     `${yearMonth}/ryu_g.txt`,
-    octokit
+    octokit,
   )
 
   const sKFixedData = formatSpritingBillsData(sKFixedStringData)
@@ -28,7 +27,7 @@ const setupData = async (yearMonth: string) => {
   return {
     sKFixedData: sKFixedData,
     sKData: sKData,
-    ryuData: ryuData
+    ryuData: ryuData,
   }
 }
 
