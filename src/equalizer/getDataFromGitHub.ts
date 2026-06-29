@@ -8,7 +8,7 @@ const getDataFromGitHub = async (path: string, octokit) => {
 
   if (Array.isArray(buffer.data)) return
 
-  return Buffer.from(buffer.data.content, 'base64').toString().split('\n')
+  return Buffer.from(buffer.data.content, 'base64').toString().split(/\r?\n/)
 }
 
 export default getDataFromGitHub
