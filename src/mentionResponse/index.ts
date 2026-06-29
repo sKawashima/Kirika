@@ -1,15 +1,19 @@
-import { AppMentionEvent, Context, SayFn } from '@slack/bolt'
-import { fetchTextFromUrls } from './fetchText'
-import { generateMessage, generateSummaryMessage, generateSummaryMessageFromUrls } from './generateMessage'
-import { getUrl } from './getUrl'
-import { StringIndexed } from '@slack/bolt/dist/types/helpers'
-import { WebClient } from '@slack/web-api'
+import type { AppMentionEvent, Context, SayFn } from "@slack/bolt"
+import type { StringIndexed } from "@slack/bolt/dist/types/helpers"
+import type { WebClient } from "@slack/web-api"
+import { fetchTextFromUrls } from "./fetchText"
+import {
+  generateMessage,
+  generateSummaryMessage,
+  generateSummaryMessageFromUrls,
+} from "./generateMessage"
+import { getUrl } from "./getUrl"
 
 export const mentionResponse = async ({
   say,
   event,
   context,
-  client
+  client,
 }: {
   say: SayFn
   event: AppMentionEvent
@@ -31,49 +35,44 @@ export const mentionResponse = async ({
       text: message,
       thread_ts,
       unfurl_links: false,
-      unfurl_media: false
+      unfurl_media: false,
     })
   } else {
     const replies = await client.conversations.replies({
       token: context.botToken,
       channel: event.channel,
-      ts: thread_ts
+      ts: thread_ts,
     })
 
     const urlInReplies = Array.from(
-      new Set(
-        replies.messages
-          .map(m => getUrl(m.text))
-          .flat()
-          .filter(u => u)
-      )
+      new Set(replies.messages.flatMap((m) => getUrl(m.text)).filter((u) => u)),
     )
 
     if (urlInReplies.length === 0) {
       const message = await generateMessage(
         replies.messages
-          .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
-          .join('\n---\n')
+          .map((m) => `${m.display_as_bot ? "bot" : "user"}: ${m.text}`)
+          .join("\n---\n"),
       )
       const desuReplacement = () =>
-        Math.random() < 0.8 ? ' :desu:' : ':de-su:'
+        Math.random() < 0.8 ? " :desu:" : ":de-su:"
       const modifiedMessage = `${message.replace(
         /(です|)。/g,
-        desuReplacement() + '\n'
+        `${desuReplacement()}\n`,
       )}`
       say({
         text:
-          modifiedMessage.endsWith(':desu:\n') ||
-          modifiedMessage.endsWith(':de-su:\n') ||
-          modifiedMessage.endsWith(':desu:。\n') ||
-          modifiedMessage.endsWith(':de-su:。\n')
+          modifiedMessage.endsWith(":desu:\n") ||
+          modifiedMessage.endsWith(":de-su:\n") ||
+          modifiedMessage.endsWith(":desu:。\n") ||
+          modifiedMessage.endsWith(":de-su:。\n")
             ? modifiedMessage
-            : modifiedMessage.endsWith('。\n')
-            ? modifiedMessage.slice(0, -2) + desuReplacement()
-            : modifiedMessage + desuReplacement(),
+            : modifiedMessage.endsWith("。\n")
+              ? modifiedMessage.slice(0, -2) + desuReplacement()
+              : modifiedMessage + desuReplacement(),
         thread_ts,
         unfurl_links: false,
-        unfurl_media: false
+        unfurl_media: false,
       })
       return
     }
@@ -87,22 +86,28 @@ ${fetchedMarkdowns}
 
 ---
 Past Conversations:
-${replies.messages
-  .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
-  .join('\n---\n') + '\n---\n' + `user: ${event.text}`}
+${
+  replies.messages
+    .map((m) => `${m.display_as_bot ? "bot" : "user"}: ${m.text}`)
+    .join("\n---\n") +
+  "\n---\n" +
+  `user: ${event.text}`
+}
 `)
       : await generateSummaryMessageFromUrls(
           urlInReplies,
           replies.messages
-            .map(m => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
-            .join('\n---\n') + '\n---\n' + `user: ${event.text}`
+            .map((m) => `${m.display_as_bot ? "bot" : "user"}: ${m.text}`)
+            .join("\n---\n") +
+            "\n---\n" +
+            `user: ${event.text}`,
         )
 
     say({
       text: message,
       thread_ts,
       unfurl_links: false,
-      unfurl_media: false
+      unfurl_media: false,
     })
   }
 }
