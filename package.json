@@ -10,7 +10,8 @@
     "test": "ts-node",
     "type-check": "tsc src/**/*.ts --noEmit --esModuleInterop",
     "format": "biome format --write .",
-    "check": "biome check ."
+    "check": "biome check .",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -42,9 +43,12 @@
     "@biomejs/biome": "^2.5.1",
     "@types/jsdom": "^27.0.0",
     "@types/turndown": "^5.0.4",
+    "husky": "^9.1.7",
     "lint-staged": "^16.0.0"
   },
   "lint-staged": {
-    "**/*.ts": ["biome check"]
+    "**/*.ts": [
+      "biome check"
+    ]
   }
 }
