@@ -106,10 +106,10 @@ const initMessages = () => {
     const desuflash = hasJackpot && Math.random() < 1 / 10
 
     let isFirst = true
-    const post = async (text: string, ms = 500) => {
+    const post = async (text: string, ms = 500, broadcast = false) => {
       if (!isFirst) await sleep(ms)
       isFirst = false
-      await say({ text, thread_ts })
+      await say({ text, thread_ts, ...(broadcast ? { reply_broadcast: true } : {}) })
     }
 
     for (let i = 0; i < rolls.length; i++) {
@@ -117,21 +117,21 @@ const initMessages = () => {
       const jackpot = roll[0] === roll[1] && roll[1] === roll[2]
       if (jackpot) {
         while (desuflash && Math.random() < 0.5) {
-          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250)
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250, true)
         }
         const display = Math.random() < 1 / 400
           ? (['HMP', 'なまこ'] as const)[Math.floor(Math.random() * 2)]
           : roll.join(' ')
-        await post(`${display}\n大当たり:de-su:`)
+        await post(`${display}\n大当たり:de-su:`, 500, true)
         return
       }
       if (desuflash) {
         while (Math.random() < 0.5) {
-          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250)
+          await post(Math.random() < 1 / 10 ? ':dededede-su:' : ':desu:', 250, true)
         }
       }
       const isLast = i === rolls.length - 1
-      await post(isLast ? `${roll.join(' ')}\nハズレ:desu:⋯` : roll.join(' '))
+      await post(isLast ? `${roll.join(' ')}\nハズレ:desu:⋯` : roll.join(' '), 500, isLast)
     }
   })
 }
