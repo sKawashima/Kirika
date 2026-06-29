@@ -26,7 +26,7 @@ const initMessages = () => {
   app.message(/(LGTM|lgtm)/, async ({ say, message }) => {
     if (
       message.subtype &&
-      (message.subtype === 'bot_message' || 'slackbot_response')
+      (message.subtype === 'bot_message')
     )
       return
 
