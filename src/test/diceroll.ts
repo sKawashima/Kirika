@@ -1,3 +1,3 @@
-import { diceroll } from "../functions"
+import { diceroll } from '../functions'
 
-console.log(diceroll("10d6"))
+console.log(diceroll('10d6'))

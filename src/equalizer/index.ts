@@ -1,6 +1,6 @@
-import dataToBurden from "./dataToBurden"
-import dataToTextTable from "./dataToTextTable"
-import setupData from "./setupData"
+import dataToBurden from './dataToBurden'
+import dataToTextTable from './dataToTextTable'
+import setupData from './setupData'
 
 const equalizer = async () => {
   const now = new Date()

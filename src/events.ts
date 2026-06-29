@@ -1,12 +1,12 @@
-import app from "./initBolt"
-import { mentionResponse } from "./mentionResponse"
+import app from './initBolt'
+import { mentionResponse } from './mentionResponse'
 
 const initEvents = () => {
-  app.event("channel_created", async ({ event, context }) => {
+  app.event('channel_created', async ({ event, context }) => {
     try {
       await app.client.chat.postMessage({
         token: context.botToken,
-        channel: "general",
+        channel: 'general',
         text: `新しいチャンネル :de-su: :eyes:\n#${event.channel.name}`,
         link_names: true,
       })
@@ -15,7 +15,7 @@ const initEvents = () => {
     }
   })
 
-  app.event("app_mention", async ({ say, event, context, client }) => {
+  app.event('app_mention', async ({ say, event, context, client }) => {
     mentionResponse({ say, event, context, client })
   })
 }

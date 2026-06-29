@@ -1,7 +1,7 @@
-import { Octokit } from "@octokit/rest"
-import * as dotenv from "dotenv"
-import formatSpritingBillsData from "./formatSpritingBillsData"
-import getDataFromGitHub from "./getDataFromGitHub"
+import { Octokit } from '@octokit/rest'
+import * as dotenv from 'dotenv'
+import formatSpritingBillsData from './formatSpritingBillsData'
+import getDataFromGitHub from './getDataFromGitHub'
 
 const setupData = async (yearMonth: string) => {
   dotenv.config()

@@ -1,4 +1,4 @@
-import app from "./initBolt"
+import app from './initBolt'
 
 export const getChannelsList = async ({ token }) => {
   try {
@@ -13,7 +13,7 @@ export const getChannelsList = async ({ token }) => {
       else return 0
     })
 
-    let channelsListText = ""
+    let channelsListText = ''
     getChannelsListResponce.channels.forEach((channel) => {
       if (!channel.is_archived)
         channelsListText += `<#${channel.id}|${channel.name}> ${

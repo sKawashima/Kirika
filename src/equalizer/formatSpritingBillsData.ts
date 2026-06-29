@@ -3,7 +3,7 @@ const formatSpritingBillsData = (data: string[]) => {
 
   return data
     .map((dataString) => {
-      return dataString.split(" ")
+      return dataString.split(' ')
     })
     .map((value) => {
       const text = value.reduce((acc, str, i) => {

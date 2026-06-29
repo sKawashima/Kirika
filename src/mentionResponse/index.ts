@@ -1,13 +1,13 @@
-import type { AppMentionEvent, Context, SayFn } from "@slack/bolt"
-import type { StringIndexed } from "@slack/bolt/dist/types/helpers"
-import type { WebClient } from "@slack/web-api"
-import { fetchTextFromUrls } from "./fetchText"
+import type { AppMentionEvent, Context, SayFn } from '@slack/bolt'
+import type { StringIndexed } from '@slack/bolt/dist/types/helpers'
+import type { WebClient } from '@slack/web-api'
+import { fetchTextFromUrls } from './fetchText'
 import {
   generateMessage,
   generateSummaryMessage,
   generateSummaryMessageFromUrls,
-} from "./generateMessage"
-import { getUrl } from "./getUrl"
+} from './generateMessage'
+import { getUrl } from './getUrl'
 
 export const mentionResponse = async ({
   say,
@@ -51,23 +51,23 @@ export const mentionResponse = async ({
     if (urlInReplies.length === 0) {
       const message = await generateMessage(
         replies.messages
-          .map((m) => `${m.display_as_bot ? "bot" : "user"}: ${m.text}`)
-          .join("\n---\n"),
+          .map((m) => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
+          .join('\n---\n'),
       )
       const desuReplacement = () =>
-        Math.random() < 0.8 ? " :desu:" : ":de-su:"
+        Math.random() < 0.8 ? ' :desu:' : ':de-su:'
       const modifiedMessage = `${message.replace(
         /(です|)。/g,
         `${desuReplacement()}\n`,
       )}`
       say({
         text:
-          modifiedMessage.endsWith(":desu:\n") ||
-          modifiedMessage.endsWith(":de-su:\n") ||
-          modifiedMessage.endsWith(":desu:。\n") ||
-          modifiedMessage.endsWith(":de-su:。\n")
+          modifiedMessage.endsWith(':desu:\n') ||
+          modifiedMessage.endsWith(':de-su:\n') ||
+          modifiedMessage.endsWith(':desu:。\n') ||
+          modifiedMessage.endsWith(':de-su:。\n')
             ? modifiedMessage
-            : modifiedMessage.endsWith("。\n")
+            : modifiedMessage.endsWith('。\n')
               ? modifiedMessage.slice(0, -2) + desuReplacement()
               : modifiedMessage + desuReplacement(),
         thread_ts,
@@ -88,18 +88,18 @@ ${fetchedMarkdowns}
 Past Conversations:
 ${
   replies.messages
-    .map((m) => `${m.display_as_bot ? "bot" : "user"}: ${m.text}`)
-    .join("\n---\n") +
-  "\n---\n" +
+    .map((m) => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
+    .join('\n---\n') +
+  '\n---\n' +
   `user: ${event.text}`
 }
 `)
       : await generateSummaryMessageFromUrls(
           urlInReplies,
           replies.messages
-            .map((m) => `${m.display_as_bot ? "bot" : "user"}: ${m.text}`)
-            .join("\n---\n") +
-            "\n---\n" +
+            .map((m) => `${m.display_as_bot ? 'bot' : 'user'}: ${m.text}`)
+            .join('\n---\n') +
+            '\n---\n' +
             `user: ${event.text}`,
         )
 
