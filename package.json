@@ -8,7 +8,9 @@
     "start": "ts-node src/index.ts",
     "precommit": "lint-staged",
     "test": "ts-node",
-    "type-check": "tsc src/**/*.ts --noEmit --esModuleInterop"
+    "type-check": "tsc src/**/*.ts --noEmit --esModuleInterop",
+    "format": "biome format --write .",
+    "check": "biome check ."
   },
   "repository": {
     "type": "git",
@@ -37,11 +39,12 @@
     "typescript": "^6.0.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.1",
     "@types/jsdom": "^27.0.0",
     "@types/turndown": "^5.0.4",
     "lint-staged": "^16.0.0"
   },
   "lint-staged": {
-    "**/*": []
+    "**/*.ts": ["biome check"]
   }
 }
