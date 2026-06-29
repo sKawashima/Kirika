@@ -1,26 +1,27 @@
-import Anthropic from '@anthropic-ai/sdk'
-import { OpenAI } from 'openai'
-import dotenv from 'dotenv'
+import Anthropic from "@anthropic-ai/sdk"
+import dotenv from "dotenv"
+import { OpenAI } from "openai"
+
 dotenv.config()
 
 const anthropic = new Anthropic({
-  apiKey: process.env['ANTHROPIC_API_KEY']
+  apiKey: process.env.ANTHROPIC_API_KEY,
 })
 
 const openai = new OpenAI({
-  apiKey: process.env['OPENAI_API_KEY']
+  apiKey: process.env.OPENAI_API_KEY,
 })
 
-const ANTHROPIC_MODEL = 'claude-sonnet-4-6'
+const ANTHROPIC_MODEL = "claude-sonnet-4-6"
 const ANTHROPIC_MAX_TOKENS = 64000 // Sonnet 4.6 同期 Messages API の出力上限
-const OPENAI_MODEL = 'gpt-4o'
+const OPENAI_MODEL = "gpt-4o"
 
 // サーバーサイド Web 検索ツール。検索は Anthropic 側で実行され、Claude が
 // 必要と判断したときだけ自動で使う（こちらで検索 API を実装する必要はない）。
 const WEB_SEARCH_TOOL: Anthropic.Messages.WebSearchTool20250305 = {
-  type: 'web_search_20250305',
-  name: 'web_search',
-  max_uses: 5 // 1 リクエストあたりの検索回数上限（コスト・レイテンシ抑制）
+  type: "web_search_20250305",
+  name: "web_search",
+  max_uses: 5, // 1 リクエストあたりの検索回数上限（コスト・レイテンシ抑制）
 }
 
 // pause_turn による継続リクエストの上限（初回 + 継続を含む。無限ループ防止）
@@ -30,7 +31,7 @@ const MAX_TURNS = 5
 // 4xx・認証・レート制限などリクエスト起因のエラーではフォールバックしない。
 const isAnthropicServerError = (error: unknown): boolean => {
   if (error instanceof Anthropic.APIConnectionError) return true
-  if (error instanceof Anthropic.APIError && typeof error.status === 'number') {
+  if (error instanceof Anthropic.APIError && typeof error.status === "number") {
     return error.status >= 500
   }
   return false
@@ -77,13 +78,13 @@ You will answer in Japanese unless otherwise instructed by the user.
 const collectContent = (
   message: Anthropic.Messages.Message,
   textParts: string[],
-  sources: Map<string, string> // url -> title（重複排除）
+  sources: Map<string, string>, // url -> title（重複排除）
 ): void => {
   for (const block of message.content) {
-    if (block.type !== 'text') continue
+    if (block.type !== "text") continue
     textParts.push(block.text)
     for (const citation of block.citations ?? []) {
-      if (citation.type === 'web_search_result_location') {
+      if (citation.type === "web_search_result_location") {
         sources.set(citation.url, citation.title ?? citation.url)
       }
     }
@@ -94,16 +95,13 @@ const collectContent = (
 // 検索が使われた場合だけ末尾に出典 URL を付ける。
 const buildResult = (
   textParts: string[],
-  sources: Map<string, string>
+  sources: Map<string, string>,
 ): string => {
   // finalText() と同じく text block を join(' ') で連結する
-  let result = textParts.join(' ').trim()
+  let result = textParts.join(" ").trim()
   if (sources.size > 0) {
-    const lines = Array.from(
-      sources,
-      ([url, title]) => `• <${url}|${title}>`
-    )
-    result += `\n\n*出典*\n${lines.join('\n')}`
+    const lines = Array.from(sources, ([url, title]) => `• <${url}|${title}>`)
+    result += `\n\n*出典*\n${lines.join("\n")}`
   }
   return result
 }
@@ -111,11 +109,11 @@ const buildResult = (
 // Anthropic を主に応答を生成し、Anthropic 側のサーバーエラー時のみ OpenAI にフォールバックする。
 const generate = async (
   systemPrompt: string,
-  text: string
+  text: string,
 ): Promise<string> => {
   try {
     const messages: Anthropic.Messages.MessageParam[] = [
-      { role: 'user', content: text }
+      { role: "user", content: text },
     ]
     const textParts: string[] = []
     const sources = new Map<string, string>()
@@ -132,13 +130,13 @@ const generate = async (
         system: systemPrompt,
         messages,
         tools: [WEB_SEARCH_TOOL],
-        temperature: 0
+        temperature: 0,
       })
       const message = await stream.finalMessage()
       collectContent(message, textParts, sources)
       // pause_turn 以外（end_turn 等）で完了。pause_turn のときだけ継続する。
-      if (message.stop_reason !== 'pause_turn') break
-      messages.push({ role: 'assistant', content: message.content })
+      if (message.stop_reason !== "pause_turn") break
+      messages.push({ role: "assistant", content: message.content })
     }
     // 本文を組み立て、検索が使われていれば出典 URL も付加する
     return buildResult(textParts, sources)
@@ -151,12 +149,12 @@ const generate = async (
       const res = await openai.chat.completions.create({
         model: OPENAI_MODEL,
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: text }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: text },
         ],
-        temperature: 0
+        temperature: 0,
       })
-      return res.choices[0].message.content ?? ''
+      return res.choices[0].message.content ?? ""
     } catch (fallbackError) {
       return `エラーが発生しました。: ${fallbackError}`
     }
@@ -183,11 +181,11 @@ export const generateSummaryMessage = (text: string) =>
 
 export const generateSummaryMessageFromUrls = (
   urls: string[],
-  conversationContext?: string
+  conversationContext?: string,
 ) => {
   const input = conversationContext
-    ? `URLs:\n${urls.join('\n')}\n\n---\nPast Conversations:\n${conversationContext}`
-    : urls.join('\n')
+    ? `URLs:\n${urls.join("\n")}\n\n---\nPast Conversations:\n${conversationContext}`
+    : urls.join("\n")
   return generate(URL_FALLBACK_SYSTEM_PROMPT, input)
 }
 

@@ -1,6 +1,6 @@
-import setupData from './setupData'
-import dataToBurden from './dataToBurden'
-import dataToTextTable from './dataToTextTable'
+import dataToBurden from "./dataToBurden"
+import dataToTextTable from "./dataToTextTable"
+import setupData from "./setupData"
 
 const equalizer = async () => {
   const now = new Date()
@@ -26,8 +26,10 @@ ${dataToTextTable(data.ryuData)}
 合計: ${dataToBurden(data.ryuData)} 円
 
 ryu_g → sK 精算額
-${(dataToBurden(data.sKData) - dataToBurden(data.ryuData)) / 2 +
-  dataToBurden(data.sKFixedData)} 円
+${
+  (dataToBurden(data.sKData) - dataToBurden(data.ryuData)) / 2 +
+  dataToBurden(data.sKFixedData)
+} 円
 `
   return message
 }
@@ -58,8 +60,10 @@ ${dataToTextTable(data.ryuData)}
 合計: ${dataToBurden(data.ryuData)} 円
 
 ryu_g → sK 精算額
-${(dataToBurden(data.sKData) - dataToBurden(data.ryuData)) / 2 +
-  dataToBurden(data.sKFixedData)} 円
+${
+  (dataToBurden(data.sKData) - dataToBurden(data.ryuData)) / 2 +
+  dataToBurden(data.sKFixedData)
+} 円
 `
   return message
 }

@@ -1,10 +1,11 @@
-import app from './initBolt'
-import initCommands from './commands'
-import initEvents from './events'
-import initMessages from './messages'
+import initCommands from "./commands"
+import initEvents from "./events"
+import app from "./initBolt"
+import initMessages from "./messages"
+
 ;(async () => {
   await app.start(process.env.PORT || 3000)
-  console.log('⚡️ Bolt app is running')
+  console.log("⚡️ Bolt app is running")
 })()
 
 initCommands()
